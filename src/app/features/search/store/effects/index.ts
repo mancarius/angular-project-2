@@ -1,0 +1,1 @@
+export * as searchEffects from "./search.effect"
