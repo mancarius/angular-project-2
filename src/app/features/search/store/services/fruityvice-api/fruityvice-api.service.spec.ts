@@ -20,19 +20,25 @@ describe('FruitSearchService', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
+  it('should be created', () => { 
     expect(service).toBeTruthy();
   });
 
   describe("#find", () => {
 
     it('should call httpClient', () => {
-      service.find({ filters: {} }).subscribe((result) => {
+      const expectedUrl = "https://www.fruityvice.com/api/fruit/banana"
+      const expectedMethod = "GET";
+      const filters = {
+        name: "banana"
+      }
+
+      service.find({ filters }).subscribe((result) => {
         
       });
       
-      const req = httpMock.expectOne("https://localhost:44305/todolist");
-      expect(req.request.method).toBe("GET");
+      const req = httpMock.expectOne(expectedUrl);
+      expect(req.request.method).toBe(expectedMethod);
     })
   });
 });

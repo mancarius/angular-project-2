@@ -5,7 +5,7 @@ import { counterFeatureKey, CounterState, selectCount } from './store/counter.re
 import { decrement, preIncrement, reset } from './store/counter.actions';
 
 @Component({
-  selector: 'app-counter',
+  selector: 'fruit-counter',
   templateUrl: './counter.component.html',
   styleUrls: ['./counter.component.css'],
 })

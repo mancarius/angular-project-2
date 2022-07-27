@@ -7,6 +7,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { CounterModule } from './features/counter/counter.module';
 import { EffectsModule } from '@ngrx/effects';
+import { CounterComponent } from './features/counter/counter.component';
 
 @NgModule({
   imports: [

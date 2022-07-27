@@ -6,7 +6,7 @@ import { mergeMap, map, catchError, of } from "rxjs";
 import { coreActions } from "src/app/core/store/actions";
 import { selectQueryParams } from "src/app/core/store/selectors/router.selectors";
 import { searchActions } from "../actions";
-import { FruityviceApiService } from "../services/fruityvice-api.service";
+import { FruityviceApiService } from "../services/fruityvice-api/fruityvice-api.service";
 import { Search } from "../state";
 
 @Injectable()

@@ -4,7 +4,7 @@ import { FruitAttributes } from '@enum/fruit-attributes.enum';
 import { Fruit } from '@type/fruit';
 import { ValueOf } from '@type/value-of';
 import { map, Observable } from 'rxjs';
-import { Search } from '../state';
+import { Search } from '../../state';
 
 
 @Injectable({
@@ -25,19 +25,18 @@ export class FruityviceApiService {
 
     try {
       if (typeof filters === "object") {
-        const [attribute, data] = (Object.entries(filters) as [keyof Search.filters, ValueOf<Search.filters>][])[0];
+        const [attribute, data] = (Object.entries(filters) as [keyof Search.filters, ValueOf<Search.filters>][])[0] || [];
 
-        const functionName = '_getBy' + FruitAttributes[attribute];
+        const functionName = '_getBy' + String(FruitAttributes[attribute]).toLocaleUpperCase();
 
         if (typeof this[functionName] === "function") {
           result$ = this[functionName](data);
         }
-
-        this['pippo']()
-
       }
 
-      result$ = this._getAll();
+      if (result$ === undefined) {
+        result$ = this._getAll();
+      }
     } catch (err) {
       throw err;
     }

@@ -3,9 +3,16 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngrx": {
+    "angular-project-2": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "fruit",
@@ -56,24 +63,37 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngrx:build"
+            "browserTarget": "angular-project-2:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngrx:build:production"
+              "browserTarget": "angular-project-2:build:production"
+            },
+            "development": {
+              "browserTarget": "angular-project-2:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngrx:build"
+            "browserTarget": "angular-project-2:build"
           }
         },
         "test": {
@@ -83,7 +103,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.ts",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "inlineStyleLanguage": "scss",
+            "assets": ["src/assets"],
             "styles": ["src/styles.css"],
             "scripts": []
           }
@@ -97,7 +118,6 @@
       }
     }
   },
-  "defaultProject": "dummy",
   "cli": {
     "analytics": false
   }
