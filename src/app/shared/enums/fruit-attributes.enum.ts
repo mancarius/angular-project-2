@@ -2,5 +2,6 @@ export enum FruitAttributes {
   family = "family",
   nutrition = "nutrition",
   order = "order",
-  genus = "genus"
+  genus = "genus",
+  name = "name"
 }

@@ -21,22 +21,38 @@ export class FruityviceApiService {
    * @returns {Observable<Fruit[]>}
    */
   find({ filters, skip = 0, limit = 20 }: Search.requestProps): Observable<Fruit[]> {
-    let result$: Observable<Fruit[]>;
+    let result$: Observable<Fruit[]> | undefined;
+    const functionNamePrefix = '_get';
+    let functionNameSuffix: string = "All";
+    let functionProps: ValueOf<Search.filters> | undefined;
 
     try {
       if (typeof filters === "object") {
+        // get attribute ad data from filters
         const [attribute, data] = (Object.entries(filters) as [keyof Search.filters, ValueOf<Search.filters>][])[0] || [];
+        // compose the function name for this attribute
+        functionNameSuffix = (() => {
+          const attributeName: string | undefined = FruitAttributes[attribute];
 
-        const functionName = '_getBy' + String(FruitAttributes[attribute]).toLocaleUpperCase();
+          if (attributeName) {
+            return `By${attributeName.charAt(0).toLocaleUpperCase()}${attributeName.substring(1)}`;
+          } else {
+            return "All"
+          }
+        })();
 
-        if (typeof this[functionName] === "function") {
-          result$ = this[functionName](data);
-        }
+        functionProps = data;
       }
 
-      if (result$ === undefined) {
-        result$ = this._getAll();
+      const functionName = functionNamePrefix + functionNameSuffix;
+
+      // if method exists, then call it
+      if (typeof Reflect.get(this, functionName) === "function") {
+        result$ = Reflect.get(this, functionName).call(this, functionProps);
+      } else {
+        throw new TypeError(`${functionName} is not a function`)
       }
+
     } catch (err) {
       throw err;
     }
