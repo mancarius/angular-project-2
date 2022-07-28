@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { FruityviceApiService } from './fruityvice-api.service';
-import { ValueOf } from '@type/value-of';
 import { Search } from 'search/store/state';
 import { FruitNutritionTypes } from '@enum/fruit-nutrition-types.enum';
 
