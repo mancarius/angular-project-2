@@ -8,7 +8,6 @@ import { FruitNutritionTypes } from '@enum/fruit-nutrition-types.enum';
 describe('FruitSearchService', () => {
   let service: FruityviceApiService;
   let httpMock: HttpTestingController;
-  let mockFruityviceApiService: FruityviceApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

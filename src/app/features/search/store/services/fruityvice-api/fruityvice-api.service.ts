@@ -16,7 +16,7 @@ export class FruityviceApiService {
   constructor(protected _http: HttpClient) { }
 
   /**
-   * 
+   * Find fruits using the given filters. Returns results depending on pagination
    * @param {Search.requestProps} params
    * @returns {Observable<Fruit[]>}
    */
