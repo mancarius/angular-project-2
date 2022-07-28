@@ -1,1 +1,1 @@
-export * as searchEffects from "./search.effect"
+export * as searchEffects from "./search.effects"
