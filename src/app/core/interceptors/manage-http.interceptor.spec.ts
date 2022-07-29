@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Route } from '@enum/route.enum';
-import { searchRoutes } from 'search/search-routing.module';
-import { SearchComponent } from 'search/search.component';
+import { searchRoutes } from 'src/app/features/fruit-search/search-routing.module';
+import { SearchComponent } from 'src/app/features/fruit-search/search.component';
 import { AppComponent } from 'src/app/app.component';
 import { HttpAbortService } from '../services/http-abort.service';
 

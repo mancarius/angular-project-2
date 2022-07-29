@@ -22,8 +22,11 @@
       "@type/*": [
         "src/app/shared/types/*"
       ],
-      "search/*": [
-        "src/app/features/search/*"
+      "@fruit/search/*": [
+        "src/app/features/fruit-search/*"
+      ],
+      "@fruit/list/*": [
+        "src/app/features/fruit-list/*"
       ]
     }
   }

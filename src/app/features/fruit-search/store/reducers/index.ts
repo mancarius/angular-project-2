@@ -1,0 +1,1 @@
+export * as searchReducers from './search.reducers';

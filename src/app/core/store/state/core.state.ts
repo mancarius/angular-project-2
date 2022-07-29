@@ -3,7 +3,6 @@ import { Fruit } from "@type/fruit";
 export namespace Core {
 
   export interface state {
-    items: Fruit[],
     isLoading: boolean,
     notification: notification
   }
@@ -16,7 +15,6 @@ export namespace Core {
 
 
 export const initialCoreState: Core.state = {
-  items: [],
   isLoading: false,
   notification: {
     message: null,

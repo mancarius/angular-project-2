@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { FruityviceApiService } from './fruityvice-api.service';
-import { Search } from 'search/store/state';
+import { Search } from 'src/app/features/fruit-search/store/state';
 import { FruitNutritionTypes } from '@enum/fruit-nutrition-types.enum';
 
 describe('FruitSearchService', () => {
@@ -122,8 +122,10 @@ describe('FruitSearchService', () => {
       const expectedMethod = "GET";
 
       service.find({ filters, skip, limit }).subscribe((_response) => {
-        expect(_response.length).toBe(limit);
-        expect(_response[0].id).toBe(3)
+        const { items, count } = _response;
+        expect(items.length).toBe(limit);
+        expect(items[0].id).toBe(3);
+        expect(count).toBe(5);
       });
 
       const req = httpMock.expectOne(expectedUrl);

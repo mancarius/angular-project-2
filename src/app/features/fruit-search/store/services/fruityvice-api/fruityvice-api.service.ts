@@ -4,6 +4,7 @@ import { FruitAttributes } from '@enum/fruit-attributes.enum';
 import { Fruit } from '@type/fruit';
 import { ValueOf } from '@type/value-of';
 import { map, Observable } from 'rxjs';
+import { isTemplateSpan } from 'typescript';
 import { Search } from '../../state';
 
 
@@ -20,7 +21,7 @@ export class FruityviceApiService {
    * @param {Search.requestProps} params
    * @returns {Observable<Fruit[]>}
    */
-  find({ filters, skip = 0, limit = 20 }: Search.requestProps): Observable<Fruit[]> {
+  find({ filters, skip = 0, limit = 20 }: Omit<Search.requestProps, "page">): Observable<Search.results> {
     let result$: Observable<Fruit[]> | undefined;
     const functionNamePrefix = '_get';
     let functionNameSuffix: string = "All";
@@ -58,7 +59,11 @@ export class FruityviceApiService {
     }
 
     // returns paginated results
-    return result$.pipe(map((items) => items.slice(skip, skip + limit)))
+    return result$.pipe(
+      map((items) => ({
+        items: items.slice(skip, skip + limit), count: items.length
+      }))
+    );
   }
 
   /**
