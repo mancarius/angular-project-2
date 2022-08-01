@@ -7,6 +7,6 @@ export const requestFulfilled = createAction("[Fruit Search] Fulfilled request",
 
 export const requestRejected = createAction("[Fruit Search] Rejected request", props<{ error: any }>());
 
-export const setCurrentPage = createAction("[Fruit Search] Set page number", props<{ page: Search.state['currentPage'] }>());
+export const setPagination = createAction("[Fruit Search] Set pagination", props<{ page?: Search.state['currentPage'], limit?: Search.state["limit"] }>());
 
-export const setFilters = createAction("[Fruit Search] Set filters", props<{ params: { filters: Search.filters, page: Search.state["currentPage"] } }>());
+export const setFilters = createAction("[Fruit Search] Set filters", props<Search.filters>());

@@ -5,13 +5,14 @@ import { initialSearchState } from "../state/search.state";
 
 export const searchReducer = createReducer(
   initialSearchState,
-  on(searchActions.setCurrentPage, (state, { page }) => ({
+  on(searchActions.setPagination, (state, { page, limit }) => ({
     ...state,
-    currentPage: page,
+    ...(() => (typeof page === "number" ? { currentPage: page } : {}))(),
+    ...(() => (typeof limit === "number" ? { limit } : {}))(),
   })),
-  on(searchActions.setFilters, (state, { params }) => ({
+  on(searchActions.setFilters, (state, filters) => ({
     ...state,
-    filters: params.filters,
+    filters,
   })),
   on(searchActions.sendRequest, (state) => ({
     ...state,

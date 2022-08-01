@@ -1,5 +1,8 @@
 import { TestBed } from "@angular/core/testing";
-import { Action } from "@ngrx/store";
+import {
+  Action,
+  StoreModule,
+} from "@ngrx/store";
 import { Observable, throwError } from "rxjs";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { SearchEffects } from "./search.effects";
@@ -7,6 +10,8 @@ import { ROUTER_NAVIGATED } from "@ngrx/router-store";
 import { TestScheduler } from "rxjs/testing";
 import { searchActions } from "../actions";
 import { FruityviceApiService } from "../services/fruityvice-api/fruityvice-api.service";
+import { searchReducers } from "../reducers";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("SearchEffects", () => {
   let actions$ = new Observable<Action>();
@@ -20,6 +25,10 @@ describe("SearchEffects", () => {
     ]);
 
     TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        StoreModule.forRoot({ search: searchReducers.searchReducer }),
+      ],
       providers: [
         provideMockActions(() => actions$),
         SearchEffects,
@@ -33,7 +42,7 @@ describe("SearchEffects", () => {
     });
   });
 
-  describe("updateFiltersOnUrlChange", () => {
+  describe("#updateFiltersOnUrlChange", () => {
     it("should return action type '[Fruit Search] Set filters' when route is 'search' and null with other routes", () => {
       testScheduler.run((helpers) => {
         const { hot, expectObservable } = helpers;
@@ -58,50 +67,36 @@ describe("SearchEffects", () => {
         });
 
         expectObservable(effects.updateFiltersOnUrlChange$).toBe("-c-d", {
-          c: searchActions.setFilters({ params: { filters: {}, page: 3 } }),
+          c: searchActions.setFilters({}),
           d: null,
         });
       });
     });
   });
 
-  describe("resetPaginationOnFiltersChange", () => {
-    it("should return action '[Fruit Search] Set page number' with page=1 on '[Fruit Search] Set filters'", () => {
+  describe("#sendRequestOnPaginationChange", () => {
+    it("should return action '[Fruit Search] Send request' on '[Fruit Search] Set page number'", () => {
       testScheduler.run((helpers) => {
         const { hot, expectObservable } = helpers;
 
         actions$ = hot("-a", {
-          a: searchActions.setFilters({ params: { filters: {}, page: 1 } }),
+          a: searchActions.setPagination({ page: 2 }),
         });
 
-        expectObservable(effects.fruitsRequest$).toBe("-c", {
-          c: searchActions.setCurrentPage({ page: 1 }),
-        });
-      });
-    });
-
-    describe("sendRequestOnPaginationChange", () => {
-    it("should return action '[Fruit Search] Set page number' on '[Fruit Search] Set filters'", () => {
-      testScheduler.run((helpers) => {
-        const { hot, expectObservable } = helpers;
-
-        actions$ = hot("-a", {
-          a: searchActions.setFilters({ params: { filters: {}, page: 1 } }),
-        });
-
-        expectObservable(effects.fruitsRequest$).toBe("-c", {
-          c: searchActions.setCurrentPage({ page: 1 }),
+        expectObservable(effects.sendRequestOnPaginationChange$).toBe("-c", {
+          c: searchActions.sendRequest({ filters: {}, skip: 0, limit: 20 }),
         });
       });
     });
+  });
 
-  describe("fruitsRequest", () => {
+  describe("#fruitsRequest", () => {
     it("should return action '[Fruit Search] Fulfilled request' on '[Fruit Search] Send request'", () => {
       testScheduler.run((helpers) => {
         const { hot, cold, expectObservable } = helpers;
 
         actions$ = hot("-a", {
-          a: searchActions.sendRequest({ filters: {} }),
+          a: searchActions.sendRequest({ skip: 0, limit: 10, filters: {} }),
         });
 
         FruityviceApiServiceSpy.find.and.returnValue(
@@ -121,7 +116,7 @@ describe("SearchEffects", () => {
         const { hot, cold, expectObservable } = helpers;
 
         actions$ = hot("a", {
-          a: searchActions.sendRequest({ filters: {} }),
+          a: searchActions.sendRequest({ skip: 0, limit: 10, filters: {} }),
         });
 
         FruityviceApiServiceSpy.find.and.returnValue(

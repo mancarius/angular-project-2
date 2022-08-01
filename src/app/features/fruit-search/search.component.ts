@@ -2,7 +2,15 @@ import { ValueOf } from "@type/value-of";
 import * as fromSearch from "@fruit/search/store";
 import { Store } from "@ngrx/store";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, ReplaySubject, Subject, Subscription } from "rxjs";
+import {
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription,
+} from "rxjs";
 import { FruitNutritionTypes } from "@enum/fruit-nutrition-types.enum";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Route as Routes } from "@enum/route.enum";
@@ -16,24 +24,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   filters$: Observable<fromSearch.types.filters>;
   results$: Observable<fromSearch.types.results>;
   isLoading$: Observable<boolean>;
-  currentPage$: ReplaySubject<fromSearch.types.state["currentPage"]>;
+  currentPage$: Observable<fromSearch.types.state["currentPage"]>;
   queryParams$: Subject<Partial<fromSearch.types.queryParams>> = new Subject();
   subscriptions: Subscription[] = [];
 
-  constructor(
-    private store: Store,
-    private router: Router,
-  ) {
-    // convert currentPage selector in replayObject
-    this.subscriptions.push(
-      this.store
-        .select(fromSearch.reducers.selectCurrentPage)
-        .subscribe(this.currentPage$)
-    );
-
+  constructor(private store: Store, private router: Router) {
     // refresh query params in the url on query params change
     this.subscriptions.push(
-      this.queryParams$.subscribe({
+      this.queryParams$.pipe(distinctUntilChanged()).subscribe({
         next: (queryParams) => {
           this.router.navigate([Routes.search], { queryParams });
         },
@@ -46,7 +44,23 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.filters$ = this.store.select(fromSearch.reducers.selectFilters);
+    this.subscriptions.push(
+      combineLatest([
+        this.store.select(fromSearch.reducers.selectFilters),
+        this.store.select(fromSearch.reducers.selectCurrentPage),
+        this.store.select(fromSearch.reducers.selectLimit),
+      ])
+        .pipe(
+          map(([filters, page, limit]) => {
+            return { page, limit, ...this._filtersToQueryParams(filters) };
+          }),
+          distinctUntilChanged()
+        )
+        .subscribe({
+          next: this.queryParams$.next,
+        })
+    );
+
     this.results$ = this.store.select(fromSearch.reducers.selectResults);
     this.isLoading$ = this.store.select(
       fromSearch.selectors.selectSearchIsLoading
@@ -57,7 +71,7 @@ export class SearchComponent implements OnInit, OnDestroy {
    * Set query params with the given filters
    * @param _filters
    */
-  setQuery(_filters: fromSearch.types.filters): void {
+  private _filtersToQueryParams(_filters: fromSearch.types.filters) {
     const [attribute, value] = (Object.entries(_filters)[0] || []) as [
       keyof fromSearch.types.filters,
       ValueOf<fromSearch.types.filters>
@@ -78,11 +92,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         queryParams.val = value;
       }
 
-      this.queryParams$.next(queryParams);
+      return queryParams;
     }
+
+    return {};
   }
 
-  setPagination() {}
+  setQueryParams() {}
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());

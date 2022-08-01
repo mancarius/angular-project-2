@@ -35,14 +35,15 @@ export namespace Search {
     val?: string;
     min?: number;
     max?: number;
-    page: number;
+    page?: number;
+    limit?: number;
   }
 
   export interface requestProps
     extends Partial<Omit<Search.state, "results" | "status" | "filters" | "currentPage">> {
     filters: Search.state["filters"];
     skip?: number;
-    page: number;
+    limit?: number;
   }
 }
 
