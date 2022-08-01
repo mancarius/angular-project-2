@@ -10,7 +10,7 @@ export const searchReducer = createReducer(
     ...(() => (typeof page === "number" ? { currentPage: page } : {}))(),
     ...(() => (typeof limit === "number" ? { limit } : {}))(),
   })),
-  on(searchActions.setFilters, (state, filters) => ({
+  on(searchActions.setFilters, (state, { type, ...filters }) => ({
     ...state,
     filters,
   })),
@@ -29,6 +29,11 @@ export const searchReducer = createReducer(
   }))
 );
 
+export const searchFeature = createFeature({
+  name: "search",
+  reducer: searchReducer,
+});
+
 export const {
   selectCurrentPage,
   selectFilters,
@@ -36,4 +41,4 @@ export const {
   selectResults,
   selectSearchState,
   selectStatus,
-} = createFeature({ name: "search", reducer: searchReducer });
+} = searchFeature;

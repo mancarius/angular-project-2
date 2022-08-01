@@ -1,8 +1,6 @@
+import { FruitNutritionTypes } from "@enum/fruit-nutrition-types.enum";
 import { TestBed } from "@angular/core/testing";
-import {
-  Action,
-  StoreModule,
-} from "@ngrx/store";
+import { Action, StoreModule } from "@ngrx/store";
 import { Observable, throwError } from "rxjs";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { SearchEffects } from "./search.effects";
@@ -11,7 +9,7 @@ import { TestScheduler } from "rxjs/testing";
 import { searchActions } from "../actions";
 import { FruityviceApiService } from "../services/fruityvice-api/fruityvice-api.service";
 import { searchReducers } from "../reducers";
-import { RouterTestingModule } from "@angular/router/testing";
+import { Search } from "../state";
 
 describe("SearchEffects", () => {
   let actions$ = new Observable<Action>();
@@ -26,7 +24,6 @@ describe("SearchEffects", () => {
 
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule.withRoutes([]),
         StoreModule.forRoot({ search: searchReducers.searchReducer }),
       ],
       providers: [
@@ -127,6 +124,49 @@ describe("SearchEffects", () => {
           c: searchActions.requestRejected({ error: new Error("Fake error") }),
         });
       });
+    });
+  });
+
+  describe("#_queryParamsToFilters", () => {
+    it("should convert nutrition queryParams to corresponding filters", () => {
+      const mockQueryParams: Partial<Search.queryParams> = {
+        arg: "nutrition",
+        val: FruitNutritionTypes.calories,
+        min: 150,
+      };
+      const expectedFilters: Search.filters = {
+        nutrition: { type: FruitNutritionTypes.calories, min: 150, max: 1000 },
+      };
+
+      expect(effects["_queryParamsToFilters"](mockQueryParams)).toEqual(
+        expectedFilters
+      );
+    });
+
+    it("should convert generic queryParams to corresponding filters", () => {
+      const mockQueryParams: Partial<Search.queryParams> = {
+        arg: "name",
+        val: "banana",
+      };
+      const expectedFilters: Search.filters = {
+        name: "banana",
+      };
+
+      expect(effects["_queryParamsToFilters"](mockQueryParams)).toEqual(
+        expectedFilters
+      );
+    });
+
+    it("should convert invalid queryParams to empty object", () => {
+      const mockQueryParams: Partial<Search.queryParams> = {
+        arg: "",
+        val: "banana",
+      };
+      const expectedFilters: Search.filters = {};
+
+      expect(effects["_queryParamsToFilters"](mockQueryParams)).toEqual(
+        expectedFilters
+      );
     });
   });
 });

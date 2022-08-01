@@ -1,1 +1,6 @@
-<p>search works!</p>
+<div>
+  <fruity-filters [queryParams]="queryParams$ | async" (onFiltersChange)="setQueryParams($event)"></fruity-filters>
+</div>
+<div>
+  <fruity-list [items]="results$ | async"></fruity-list>
+</div>

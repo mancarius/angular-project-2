@@ -1,1 +1,43 @@
-<p>filters works!</p>
+<form [formGroup]="filters" (ngSubmit)="onFormSubmit()">
+
+  <p>Search for fruits where</p>
+
+  <mat-form-field appearance="standard">
+    <mat-select #argument formControlName="argument">
+      <mat-option *ngFor="let argument of arguments" [value]="argument">{{ argument }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <p>is equal to</p>
+
+  <mat-form-field *ngIf="argument.value !== 'nutrition'" appearance="standard">
+    <input matInput type="text" formControlName="value"/>
+    <mat-error *ngIf="filters.get('value')?.invalid && filters.get('value').dirty">{{getErrorMessage("value")}}</mat-error>
+  </mat-form-field>
+
+  <ng-container *ngIf="argument.value === 'nutrition'">
+    <mat-form-field appearance="standard">
+      <mat-select formControlName="value">
+        <mat-option *ngFor="let nutritionType of nutritionTypes" [value]="nutritionType">{{ nutritionType }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <p>from</p>
+
+    <mat-form-field appearance="standard">
+      <input matInput type="number" formControlName="min"/>
+      <mat-error *ngIf="filters.get('min')?.invalid">{{getErrorMessage("min")}}</mat-error>
+    </mat-form-field>
+
+    <p>to</p>
+
+    <mat-form-field appearance="standard">
+      <input matInput type="number" formControlName="max"/>
+      <mat-error *ngIf="filters.get('max')?.invalid">{{getErrorMessage("max")}}</mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <button mat-mini-fab color="primary" type="submit" aria-label="Example icon button with a delete icon">
+    <mat-icon>search</mat-icon>
+  </button>
+</form>

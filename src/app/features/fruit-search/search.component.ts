@@ -12,23 +12,28 @@ import {
   Subscription,
 } from "rxjs";
 import { FruitNutritionTypes } from "@enum/fruit-nutrition-types.enum";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Route as Routes } from "@enum/route.enum";
 
 @Component({
-  selector: "fruit-search",
+  selector: "fruity-search",
   templateUrl: "./search.component.html",
   styleUrls: ["./search.component.css"],
 })
 export class SearchComponent implements OnInit, OnDestroy {
   filters$: Observable<fromSearch.types.filters>;
   results$: Observable<fromSearch.types.results>;
-  isLoading$: Observable<boolean>;
-  currentPage$: Observable<fromSearch.types.state["currentPage"]>;
-  queryParams$: Subject<Partial<fromSearch.types.queryParams>> = new Subject();
+  isLoading$: Observable<boolean> = this.store.select(fromSearch.selectors.selectSearchIsLoading);
+  currentPage$: ReplaySubject<fromSearch.types.state["currentPage"]>;
+  queryParams$: ReplaySubject<Partial<fromSearch.types.queryParams>> =
+    new ReplaySubject();
   subscriptions: Subscription[] = [];
 
-  constructor(private store: Store, private router: Router) {
+  constructor(
+    private store: Store,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     // refresh query params in the url on query params change
     this.subscriptions.push(
       this.queryParams$.pipe(distinctUntilChanged()).subscribe({
@@ -44,7 +49,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(
+    /*this.subscriptions.push(
       combineLatest([
         this.store.select(fromSearch.reducers.selectFilters),
         this.store.select(fromSearch.reducers.selectCurrentPage),
@@ -59,6 +64,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         .subscribe({
           next: this.queryParams$.next,
         })
+    );*/
+    this.subscriptions.push(
+      this.route.queryParams.pipe(distinctUntilChanged()).subscribe({
+        next: (params) => this.setQueryParams(params),
+      })
     );
 
     this.results$ = this.store.select(fromSearch.reducers.selectResults);
@@ -98,7 +108,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     return {};
   }
 
-  setQueryParams() {}
+  /**
+   *
+   * @param params
+   */
+  setQueryParams(params: fromSearch.types.queryParams) {
+    if (params.arg !== "nutrition") {
+      delete params.max;
+      delete params.min;
+    }
+
+    this.queryParams$.next({page: 1, limit: 10, ...params});
+  }
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
