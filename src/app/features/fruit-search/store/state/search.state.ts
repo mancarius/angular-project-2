@@ -8,7 +8,7 @@ export namespace Search {
     results: results;
     status: HTTPRequestStatus;
     limit: number;
-    currentPage: number;
+    page: number;
   }
 
   export interface filters {
@@ -31,18 +31,16 @@ export namespace Search {
   }
 
   export interface queryParams {
-    arg?: string;
-    val?: string;
     min?: number;
     max?: number;
     page?: number;
     limit?: number;
   }
 
-  export interface requestProps
-    extends Partial<Omit<Search.state, "results" | "status" | "filters" | "currentPage">> {
+  export interface requestParams
+    extends Partial<Pick<Search.state, "filters" | "page" | "limit">> {
     filters: Search.state["filters"];
-    skip?: number;
+    page?: number;
     limit?: number;
   }
 }
@@ -55,5 +53,5 @@ export const initialSearchState: Search.state = {
   },
   status: HTTPRequestStatus.pristine,
   limit: 20,
-  currentPage: 1
+  page: 1
 };

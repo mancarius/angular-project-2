@@ -1,5 +1,7 @@
-import { RouterModule } from '@angular/router';
-import { AppRoutingModule } from "./app-routing.module";
+import { MockApiModule } from './core/services/mock-api/mock-api.module';
+import { RouterModule } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
+import { appRoutes } from "./app.routing";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { StoreModule } from "@ngrx/store";
@@ -9,23 +11,29 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { AppComponent } from "./app.component";
 import { CounterModule } from "./features/counter/counter.module";
 import { EffectsModule } from "@ngrx/effects";
-import { HttpAbortService } from "./core/services/http-abort.service";
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
-import { ManageHttpInterceptor } from "./core/interceptors/manage-http.interceptor";
+import { HttpAbortService } from "./core/services/http-abort/http-abort.service";
 import { FruitSearchModule } from "@fruit/search/fruit-search.module";
 import { APP_BASE_HREF } from "@angular/common";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
+import { interceptorProviders } from "./core/interceptors";
+import { FruityviceMockApiService } from './core/services/fruityvice-mock-api/fruityvice-mock-api.service';
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { coreReducers } from './core/store/reducers';
 
 @NgModule({
   imports: [
     CounterModule,
-    FruitSearchModule,
     BrowserModule,
-    AppRoutingModule,
+    FruitSearchModule,
+    MockApiModule.forRoot([FruityviceMockApiService]),
+    RouterModule.forRoot(appRoutes, {
+      errorHandler: console.error,
+    }),
     EffectsModule.forRoot(),
     StoreModule.forRoot({
       router: routerReducer,
+      ...coreReducers
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
@@ -33,18 +41,15 @@ import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
     BrowserAnimationsModule,
-    RouterModule.forRoot([]),
     StoreRouterConnectingModule.forRoot(),
+    HttpClientModule,
+    MatProgressBarModule,
   ],
   declarations: [AppComponent],
   providers: [
     HttpAbortService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ManageHttpInterceptor,
-      multi: true,
-    },
     { provide: APP_BASE_HREF, useValue: "/" },
+    ...interceptorProviders,
   ],
   bootstrap: [AppComponent],
 })

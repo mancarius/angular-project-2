@@ -35,7 +35,7 @@ export const searchFeature = createFeature({
 });
 
 export const {
-  selectCurrentPage,
+  selectPage,
   selectFilters,
   selectLimit,
   selectResults,

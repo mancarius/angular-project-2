@@ -11,7 +11,7 @@
   <p>is equal to</p>
 
   <mat-form-field *ngIf="argument.value !== 'nutrition'" appearance="standard">
-    <input matInput type="text" formControlName="value"/>
+    <input matInput type="text" formControlName="value" #value (input)="toLowerCase('value', value.value)"/>
     <mat-error *ngIf="filters.get('value')?.invalid && filters.get('value').dirty">{{getErrorMessage("value")}}</mat-error>
   </mat-form-field>
 

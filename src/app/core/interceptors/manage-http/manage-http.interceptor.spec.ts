@@ -2,12 +2,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Route } from '@enum/route.enum';
-import { searchRoutes } from 'src/app/features/fruit-search/search-routing.module';
+import { searchRoutes } from '@fruit/search/search.routing';
 import { SearchComponent } from 'src/app/features/fruit-search/search.component';
 import { AppComponent } from 'src/app/app.component';
-import { HttpAbortService } from '../services/http-abort.service';
-
+import { HttpAbortService } from '../../services/http-abort/http-abort.service';
 import { ManageHttpInterceptor } from './manage-http.interceptor';
 
 describe('ManageInterceptor', () => {
@@ -35,12 +33,4 @@ describe('ManageInterceptor', () => {
     const interceptor: ManageHttpInterceptor = TestBed.inject(ManageHttpInterceptor);
     expect(interceptor).toBeTruthy();
   });
-
-  it('should call #httpAbortService.abortPendingRequests on router navigation', async () => {
-    const interceptor: ManageHttpInterceptor = TestBed.inject(ManageHttpInterceptor);
-
-    await router.navigateByUrl(Route.search);
-
-    expect(HttpAbortServiceMock.abortPendingRequests).toHaveBeenCalledTimes(1);
-  })
 });

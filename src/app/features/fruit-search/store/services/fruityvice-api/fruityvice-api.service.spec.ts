@@ -114,7 +114,7 @@ describe('FruitSearchService', () => {
       req.flush('');
     });
 
-    it('should return 2 items starting from 3th item', () => {
+    it('should return 2 items starting from 3th item', (done) => {
       const filters = {};
       const skip = 2;
       const limit = 2;
@@ -126,6 +126,7 @@ describe('FruitSearchService', () => {
         expect(items.length).toBe(limit);
         expect(items[0].id).toBe(3);
         expect(count).toBe(5);
+        done();
       });
 
       const req = httpMock.expectOne(expectedUrl);

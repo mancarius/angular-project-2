@@ -1,5 +1,3 @@
-import { Fruit } from "@type/fruit";
-
 export namespace Core {
 
   export interface state {

@@ -1,6 +1,6 @@
 <div>
-  <fruity-filters [queryParams]="queryParams$ | async" (onFiltersChange)="setQueryParams($event)"></fruity-filters>
+  <fruity-filters [requestParams]="requestParams$ | async" (onFiltersChange)="setRequestParams($event)"></fruity-filters>
 </div>
 <div>
-  <fruity-list [items]="results$ | async"></fruity-list>
+  <fruity-list [fruits]="results$ | async"></fruity-list>
 </div>
