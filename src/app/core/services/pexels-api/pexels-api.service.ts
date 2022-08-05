@@ -7,18 +7,18 @@ import {
   ErrorResponse,
   PhotosWithTotalResults,
 } from "pexels";
-import { from, mergeMap, Observable, of, take } from "rxjs";
+import { catchError, mergeMap, Observable, of, take } from "rxjs";
 import { environment } from "src/environments/environment";
 
 const pexelsApiKey = environment.pexelsApiKey;
-const pexels = createClient(pexelsApiKey);
+//const pexels = createClient(pexelsApiKey);
 
 @Injectable({
   providedIn: "root",
 })
 export class PexelsApiService {
   private _searchOptions: PaginationParams = {
-    orientation: "square",
+    orientation: "landscape",
     size: "medium",
     color: "white",
     locale: "en-US",
@@ -28,7 +28,7 @@ export class PexelsApiService {
 
   constructor(private _http: HttpClient) {}
 
-  getPhoto$(query: string, options: PaginationParams = {}): Observable<Photo> {
+  getPhoto$(query: string, options: PaginationParams = {}): Observable<Photo | null> {
     // merge options
     const searchOptions = { ...this._searchOptions, ...options };
 
@@ -44,6 +44,10 @@ export class PexelsApiService {
 
         // return photo src
         return of(photo);
+      }),
+      catchError((err) => {
+        console.warn(err);
+        return of(null);
       })
     );
   }

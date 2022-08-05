@@ -35,11 +35,11 @@ describe('FruitSearchService', () => {
         name: "banana"
       }
 
-      service.find({ filters }).subscribe((result) => { });
+      service.find({ filters, skip:0, limit:10 }).subscribe((result) => { });
 
       const req = httpMock.expectOne(expectedUrl);
       expect(req.request.method).toBe(expectedMethod);
-      req.flush('');
+      req.flush([]);
     });
 
     it('should request fruits by nutrition', () => {
@@ -53,11 +53,11 @@ describe('FruitSearchService', () => {
       const expectedUrl = "https://www.fruityvice.com/api/fruit/" + FruitNutritionTypes.calories + "?min=" + filters.nutrition.min + "&max=" + filters.nutrition.max;
       const expectedMethod = "GET";
 
-      service.find({ filters }).subscribe((result) => { });
+      service.find({ filters, skip: 0, limit: 10 }).subscribe((result) => {});
 
       const req = httpMock.expectOne(expectedUrl);
       expect(req.request.method).toBe(expectedMethod);
-      req.flush('');
+      req.flush([]);
     });
 
     it('should request fruits by genus', () => {
@@ -67,11 +67,11 @@ describe('FruitSearchService', () => {
       const expectedUrl = "https://www.fruityvice.com/api/fruit/genus/Musa";
       const expectedMethod = "GET";
 
-      service.find({ filters }).subscribe((result) => { });
+      service.find({ filters, skip: 0, limit: 10 }).subscribe((result) => {});
 
       const req = httpMock.expectOne(expectedUrl);
       expect(req.request.method).toBe(expectedMethod);
-      req.flush('');
+      req.flush([]);
     });
 
     it('should request fruits by family', () => {
@@ -81,11 +81,11 @@ describe('FruitSearchService', () => {
       const expectedUrl = "https://www.fruityvice.com/api/fruit/family/Musaceae";
       const expectedMethod = "GET";
 
-      service.find({ filters }).subscribe((result) => { });
+      service.find({ filters, skip: 0, limit: 10 }).subscribe((result) => {});
 
       const req = httpMock.expectOne(expectedUrl);
       expect(req.request.method).toBe(expectedMethod);
-      req.flush('');
+      req.flush([]);
     });
 
     it('should request fruits by order', () => {
@@ -95,11 +95,11 @@ describe('FruitSearchService', () => {
       const expectedUrl = "https://www.fruityvice.com/api/fruit/order/Zingiberales";
       const expectedMethod = "GET";
 
-      service.find({ filters }).subscribe((result) => { });
+      service.find({ filters, skip: 0, limit: 10 }).subscribe((result) => {});
 
       const req = httpMock.expectOne(expectedUrl);
       expect(req.request.method).toBe(expectedMethod);
-      req.flush('');
+      req.flush([]);
     });
 
     it('should request all fruits', () => {
@@ -107,11 +107,11 @@ describe('FruitSearchService', () => {
       const expectedUrl = "https://www.fruityvice.com/api/fruit/all";
       const expectedMethod = "GET";
 
-      service.find({ filters }).subscribe((result) => { });
+      service.find({ filters, skip: 0, limit: 10 }).subscribe((result) => {});
 
       const req = httpMock.expectOne(expectedUrl);
       expect(req.request.method).toBe(expectedMethod);
-      req.flush('');
+      req.flush([]);
     });
 
     it('should return 2 items starting from 3th item', (done) => {

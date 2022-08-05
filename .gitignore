@@ -7,5 +7,5 @@
 /package-lock.json
 
 # environment
-/**/src/environment.prod.ts
-/**/src/environment.ts
+environment.prod.ts
+environment.ts
