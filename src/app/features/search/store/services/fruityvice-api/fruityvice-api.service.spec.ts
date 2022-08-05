@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { FruityviceApiService } from './fruityvice-api.service';
-import { Search } from 'src/app/features/fruit-search/store/state';
+import { Search } from 'src/app/features/search/store/state';
 import { FruitNutritionTypes } from '@enum/fruit-nutrition-types.enum';
 
 describe('FruitSearchService', () => {

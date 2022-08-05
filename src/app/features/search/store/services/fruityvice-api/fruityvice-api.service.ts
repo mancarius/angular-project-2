@@ -4,7 +4,7 @@ import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import { Fruit } from "@type/fruit";
 import { ValueOf } from "@type/value-of";
 import { map, Observable } from "rxjs";
-import * as fromSearch from "../../";
+import * as fromSearch from "../..";
 
 @Injectable({
   providedIn: "root",

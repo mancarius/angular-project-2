@@ -1,4 +1,4 @@
-import { Search } from "@fruit/search/store/state";
+import { Search } from "src/app/features/search/store/state";
 import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import {
   ActivatedRouteSnapshot,
@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from "@angular/router";
 import { Store } from "@ngrx/store";
-import * as fromSearch from "@fruit/search/store";
+import * as fromSearch from "src/app/features/search/store";
 import { map, Observable, take } from "rxjs";
 import { Injectable } from "@angular/core";
 

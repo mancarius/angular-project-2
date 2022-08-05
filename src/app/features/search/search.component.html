@@ -1,0 +1,6 @@
+<div>
+  <fruity-search-filters [requestParams]="requestParams$ | async" (onFiltersChange)="setRequestParams($event)"></fruity-search-filters>
+</div>
+<div>
+  <fruity-search-results [fruits]="results$ | async"></fruity-search-results>
+</div>

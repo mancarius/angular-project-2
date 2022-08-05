@@ -3,19 +3,19 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import { FruitNutritionTypes } from "@enum/fruit-nutrition-types.enum";
-import * as fromSearch from "@fruit/search/store";
+import * as fromSearch from "src/app/features/search/store";
 import { minMaxCrossValidator } from "src/app/shared/validators/min-max-cross.directive";
 
 @Component({
-  selector: "fruity-filters",
-  templateUrl: "./filters.component.html",
-  styleUrls: ["./filters.component.scss"],
+  selector: "fruity-search-filters",
+  templateUrl: "./search-filters.component.html",
+  styleUrls: ["./search-filters.component.scss"],
 })
-export class FiltersComponent implements OnInit {
+export class SearchFiltersComponent implements OnInit {
   /**
    * FormGroup
    *
-   * @memberof FiltersComponent
+   * @memberof SearchFiltersComponent
    */
   filters = new FormGroup(
     {
@@ -47,7 +47,7 @@ export class FiltersComponent implements OnInit {
    * Nutrition types
    *
    * @type {FruitNutritionTypes[]}
-   * @memberof FiltersComponent
+   * @memberof SearchFiltersComponent
    */
   nutritionTypes: FruitNutritionTypes[] = Object.keys(
     FruitNutritionTypes

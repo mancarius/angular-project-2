@@ -23,7 +23,7 @@
         "src/app/shared/types/*"
       ],
       "@fruit/search/*": [
-        "src/app/features/fruit-search/*"
+        "src/app/features/search/*"
       ],
       "@fruit/list/*": [
         "src/app/features/fruit-list/*"

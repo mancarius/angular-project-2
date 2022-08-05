@@ -12,7 +12,7 @@ import { AppComponent } from "./app.component";
 import { CounterModule } from "./features/counter/counter.module";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpAbortService } from "./core/services/http-abort/http-abort.service";
-import { FruitSearchModule } from "@fruit/search/fruit-search.module";
+import { SearchModule } from "@fruit/search/search.module";
 import { APP_BASE_HREF } from "@angular/common";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
@@ -25,7 +25,7 @@ import { coreReducers } from './core/store/reducers';
   imports: [
     CounterModule,
     BrowserModule,
-    FruitSearchModule,
+    SearchModule,
     MockApiModule.forRoot([FruityviceMockApiService]),
     RouterModule.forRoot(appRoutes, {
       errorHandler: console.error,

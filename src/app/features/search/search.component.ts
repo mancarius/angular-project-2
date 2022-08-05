@@ -1,4 +1,4 @@
-import * as fromSearch from "@fruit/search/store";
+import * as fromSearch from "src/app/features/search/store";
 import { Store } from "@ngrx/store";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
