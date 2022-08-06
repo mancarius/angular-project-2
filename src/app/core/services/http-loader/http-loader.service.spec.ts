@@ -1,16 +1,20 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
+import { provideMockStore } from "@ngrx/store/testing";
 
-import { HttpLoaderService } from './http-loader.service';
+import { HttpLoaderService } from "./http-loader.service";
 
-describe('HttpLoaderService', () => {
+describe("HttpLoaderService", () => {
   let service: HttpLoaderService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideMockStore({})],
+    });
+
     service = TestBed.inject(HttpLoaderService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

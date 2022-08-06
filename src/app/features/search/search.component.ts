@@ -19,7 +19,7 @@ import { Route as Routes } from "@enum/route.enum";
 export class SearchComponent implements OnInit, OnDestroy {
   filters$: Observable<fromSearch.types.filters>;
   results$: Observable<fromSearch.types.results>;
-  isLoading$: Observable<boolean> = this.store.select(
+  isLoading$: Observable<boolean> = this._store.select(
     fromSearch.selectors.selectSearchIsLoading
   );
   currentPage$: ReplaySubject<fromSearch.types.state["page"]>;
@@ -28,9 +28,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   private _unsubscribeAll$: Subject<any> = new Subject();
 
   constructor(
-    private store: Store,
-    private router: Router,
-    private route: ActivatedRoute
+    private _store: Store,
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {
     // refresh query params in the url on query params change
     this.requestParams$
@@ -68,7 +68,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           };
 
           // Navigate to route with params
-          this.router.navigate(path, { queryParams });
+          this._router.navigate(path, { queryParams });
         },
         error: (err) => {
           console.error(err);
@@ -77,12 +77,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.data
+    this._route.data
       .pipe(distinctUntilChanged(), takeUntil(this._unsubscribeAll$))
       .subscribe(({ requestParams }) => this.setRequestParams(requestParams));
 
-    this.results$ = this.store.select(fromSearch.reducers.selectResults);
-    this.isLoading$ = this.store.select(
+    this.results$ = this._store.select(fromSearch.reducers.selectResults);
+    this.isLoading$ = this._store.select(
       fromSearch.selectors.selectSearchIsLoading
     );
   }

@@ -7,7 +7,7 @@ import * as fromSearch from "src/app/features/search/store";
   styleUrls: ["./search-results.component.scss"],
 })
 export class SearchResultsComponent implements OnInit {
-  @Input("fruits") fruits: fromSearch.types.results;
+  @Input("data") data: fromSearch.types.results;
 
   constructor() {}
 

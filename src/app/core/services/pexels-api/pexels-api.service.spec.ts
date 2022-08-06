@@ -1,9 +1,13 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
-import * as _ from 'lodash';
-import { PhotosWithTotalResults } from 'pexels';
+import { HttpParams } from "@angular/common/http";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import * as _ from "lodash";
+import { PhotosWithTotalResults } from "pexels";
 
-import { PexelsApiService } from './pexels-api.service';
+import { PexelsApiService } from "./pexels-api.service";
 
 const MOCK_API_RESPONSE: PhotosWithTotalResults = {
   total_results: 10000,
@@ -41,7 +45,7 @@ const MOCK_API_RESPONSE: PhotosWithTotalResults = {
   next_page: 2,
 };
 
-describe('PexelsApiService', () => {
+describe("PexelsApiService", () => {
   let service: PexelsApiService;
   let httpMock: HttpTestingController;
 
@@ -58,7 +62,7 @@ describe('PexelsApiService', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 
@@ -66,35 +70,36 @@ describe('PexelsApiService', () => {
     it("should call pexels api with given params", () => {
       const expectedUrl = "https://api.pexels.com/v1//search";
 
-      const expectedQueryParams = {
-        orientation: "landscape",
-        size: "medium",
-        color: "red",
-        locale: "en-US",
-        page: 1,
-        per_page: 2,
-        query: "Apple"
-      };
+      const expectedQueryParams = new HttpParams({
+        fromObject: { query: "Apple", color: "red", per_page: 2 },
+      });
 
-      service["_search"]({query: "Apple", color: "red", per_page: 2 }).subscribe({
+      service["_search"]({
+        query: "Apple",
+        color: "red",
+        per_page: 2,
+      }).subscribe({
         next(value) {
-            expect(value).toEqual(
-              MOCK_API_RESPONSE,
-              "should return the expected value"
-            );
+          expect(value).toEqual(
+            MOCK_API_RESPONSE,
+            "should return the expected value"
+          );
         },
         error(err) {
-            fail(err)
+          fail(err);
         },
       });
 
       const req = httpMock.expectOne((req) => {
-        return req.url === expectedUrl && _.isEqual(req.params, expectedQueryParams)
+        return (
+          req.url === expectedUrl &&
+          req.params.toString() === expectedQueryParams.toString()
+        );
       });
 
       expect(req.request.method).toBe("GET", "should perform a GET request");
-      
-      req.flush(MOCK_API_RESPONSE)
+
+      req.flush(MOCK_API_RESPONSE);
     });
-  })
+  });
 });

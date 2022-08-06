@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchResultsComponent } from "./search-results.component";
 
-describe('ListComponent', () => {
+describe('SearchResultComponent', () => {
   let component: SearchResultsComponent;
   let fixture: ComponentFixture<SearchResultsComponent>;
 
@@ -13,7 +13,7 @@ describe('ListComponent', () => {
 
     fixture = TestBed.createComponent(SearchResultsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    //fixture.detectChanges();
   });
 
   it('should create', () => {
