@@ -7,7 +7,8 @@ import {
   HttpResponse,
 } from "@angular/common/http";
 import { Observable, of, tap, delay } from "rxjs";
-import { LocalMap } from "src/app/shared/utils/local-map.utils";
+import { LocalMap } from "src/app/shared/utils/local-map/local-map.utils";
+import * as _ from "lodash";
 
 @Injectable()
 export class CacheInterceptor implements HttpInterceptor {
@@ -31,15 +32,16 @@ export class CacheInterceptor implements HttpInterceptor {
     const cachedResponse = this._cache.get(url);
 
     // return cached response if exists
-    if (cachedResponse) {
-      return of(new HttpResponse(cachedResponse)).pipe(delay(500));
+    if (!!cachedResponse) {
+      return of(new HttpResponse(cachedResponse)).pipe(delay(_.random(400, 800)));
     }
 
     // store and return response
     return next.handle(request).pipe(
       tap((event) => {
         if (event instanceof HttpResponse) {
-          this._cache.set(url, event);
+          // save only success responses
+          event.ok && this._cache.set(url, event);
         }
       })
     );

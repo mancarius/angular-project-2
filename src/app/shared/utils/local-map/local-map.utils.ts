@@ -66,4 +66,27 @@ export class LocalMap<S = string, T = any> {
       console.warn("[LocalMap] Error while storing value. " + error.message);
     }
   }
+
+  /**
+   * Remove one item by key if exists
+   * @param key
+   */
+  removeOne(key: S): void {
+    this._storage.removeItem(String(key));
+  }
+
+  /**
+   * Remove items by a list of key if exists
+   * @param keys
+   */
+  removeMany(keys: S[]): void {
+    keys.forEach((key) => this._storage.removeItem(String(key)));
+  }
+
+  /**
+   * clear storage
+   */
+  clear(): void {
+    this._storage.clear();
+  }
 }

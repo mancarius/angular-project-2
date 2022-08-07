@@ -1,4 +1,6 @@
-export const fruits = [
+import { Fruit } from "@type/fruit";
+
+export const FRUITYVICE_MOCK_FRUITS: Fruit[] = [
   {
     genus: "Malus",
     name: "Apple",

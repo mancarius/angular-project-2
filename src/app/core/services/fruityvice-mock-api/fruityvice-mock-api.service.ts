@@ -1,7 +1,7 @@
+import { FRUITYVICE_MOCK_FRUITS as fruitsData } from "./../../../shared/mocks/fruityvice-mocks";
 import { Injectable } from "@angular/core";
 import { cloneDeep } from "lodash";
 import { MockApiService } from "../mock-api/mock-api.service";
-import { fruits as fruitsData } from "./mockFruits";
 
 @Injectable({
   providedIn: "root",

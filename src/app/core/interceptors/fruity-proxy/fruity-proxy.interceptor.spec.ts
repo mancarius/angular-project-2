@@ -1,8 +1,6 @@
 import { HttpClient, HttpRequest, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
-import { firstValueFrom, lastValueFrom, Observable } from "rxjs";
-
 import { FruityProxyInterceptor } from "./fruity-proxy.interceptor";
 
 describe("FruityProxyInterceptor", () => {
