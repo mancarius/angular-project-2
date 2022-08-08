@@ -21,6 +21,9 @@ describe("LocalMap", () => {
     localMap["_storage"] = sessionStorageSpy;
   });
 
+  /**
+   * ATTRIBUTE: _storage
+   */
   describe("#_storage", () => {
     it("should be a valid Storage instance", () => {
       expect(new LocalMap()["_storage"]).toBeInstanceOf(window.Storage);
@@ -31,6 +34,9 @@ describe("LocalMap", () => {
     });
   });
 
+  /**
+   * METHOD: get
+   */
   describe("#get", () => {
     it("should return stored value as object", () => {
       const expectedValue = { expected: "value" };
@@ -65,6 +71,9 @@ describe("LocalMap", () => {
     });
   });
 
+  /**
+   * METHOD: set
+   */
   describe("#set", () => {
     it("should pass array as a string to #storage.serItem", () => {
       const fakeKey = "fakeKey";
@@ -106,6 +115,9 @@ describe("LocalMap", () => {
     });
   });
 
+  /**
+   * METHOD: removeOne
+   */
   describe("#removeOne", () => {
     it("should call the storage method #removeItem with the passed key", () => {
       const fakeKey = "fakeKey";
@@ -116,6 +128,9 @@ describe("LocalMap", () => {
     });
   });
 
+  /**
+   * METHOD: removeMany
+   */
   describe("#removeMany", () => {
     it("should call the storage method #removeItem 3 times with the passed keys", () => {
       const fakeKeys = ["fakeKey1", "fakeKey2", "fakeKey3"];
@@ -129,6 +144,9 @@ describe("LocalMap", () => {
     });
   });
 
+  /**
+   * METHOD: clear
+   */
   describe("#clear", () => {
     it("should call the storage method #clear", () => {
       localMap.clear();
