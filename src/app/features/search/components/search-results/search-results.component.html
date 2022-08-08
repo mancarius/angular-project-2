@@ -1,3 +1,5 @@
-<mat-grid-list cols="4" rowHeight="3:4" *ngIf="data.count > 0">
-  <mat-grid-tile *ngFor="let fruit of data.items; index as i">{{fruit.name}}</mat-grid-tile>
-</mat-grid-list>
+<ul class="results-container w-full" *ngIf="fruits$ | async">
+  <li class="result-item" *ngFor="let fruit of fruits$ | async">
+    <fruity-search-results-item [fruit]="fruit" (click)="selectFruit(fruit)"></fruity-search-results-item>
+  </li>
+</ul>

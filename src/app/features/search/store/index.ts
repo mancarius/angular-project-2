@@ -1,8 +1,18 @@
 import { searchActions as actions } from "./actions";
 import { searchEffects as effects } from "./effects";
 import { searchReducers as reducers } from "./reducers";
-import { searchSelectors as selectors } from "./selectors";
-import { initialSearchState as initialState } from "./state";
-import { Search as types } from "./state/search.state";
+import * as selectors from "./selectors";
+import initialState from "./state";
+import { Search as coreTypes } from "./state/search.state";
+import { SearchUI as uiTypes } from "./state/search-ui.state";
 
-export { initialState, actions, effects, reducers, selectors, types };
+
+export {
+  initialState,
+  actions,
+  effects,
+  reducers,
+  selectors,
+  coreTypes,
+  uiTypes,
+};

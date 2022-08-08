@@ -20,7 +20,7 @@ export class PexelsApiService {
   private _searchOptions: PaginationParams = {
     orientation: "landscape",
     size: "medium",
-    color: "white",
+    //color: "white",
     locale: "en-US",
     page: 1,
     per_page: 1,
@@ -32,7 +32,7 @@ export class PexelsApiService {
     // merge options
     const searchOptions = { ...this._searchOptions, ...options };
 
-    return this._search({ query, ...searchOptions }).pipe(
+    return this._search({ query: `${query} fruits`, ...searchOptions }).pipe(
       take(1),
       mergeMap((results) => {
         if ("error" in results) {

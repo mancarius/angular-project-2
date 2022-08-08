@@ -1,0 +1,7 @@
+.results-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 12rem));
+  gap: 3rem;
+  padding: 5vmax;
+  justify-content: center;
+}

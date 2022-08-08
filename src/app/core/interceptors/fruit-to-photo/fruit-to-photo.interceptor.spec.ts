@@ -72,6 +72,28 @@ describe("FruitToPhotoInterceptor", () => {
       });
     });
 
+    it("should return combined response with single photo", (done) => {
+      const mockFruit = FRUITYVICE_MOCK_FRUITS[0];
+      const fakeURL = "https://www.fruityvice.com";
+      const mockHttpRequest = new HttpRequest("GET", fakeURL);
+      const mockHttpResponse = new HttpResponse({ body: mockFruit });
+
+      interceptor.intercept(mockHttpRequest, next(mockHttpResponse)).subscribe({
+        next(event) {
+          if (event instanceof HttpResponse) {
+            expect(event.body.length).toBe(1, "should return 1 items");
+            event.body.forEach((fruit) => expect("photo" in fruit).toBeTrue());
+          }
+        },
+        error(err) {
+          fail(err);
+        },
+        complete() {
+          done();
+        },
+      });
+    });
+
     it("should not call #_getFruitWithPhoto$ when hostname not match 'fruityvice'", (done) => {
       const mockFruits = FRUITYVICE_MOCK_FRUITS[0];
       const fakeURL = "https://www.fruitvice.com";

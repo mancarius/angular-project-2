@@ -24,14 +24,14 @@ export class FruityviceApiService {
     skip = 0,
     limit = 20,
   }: {
-    filters: fromSearch.types.filters;
+    filters: fromSearch.coreTypes.filters;
     skip: number;
     limit: number;
-  }): Observable<fromSearch.types.results> {
+  }): Observable<fromSearch.coreTypes.results> {
     let result$: Observable<Fruit[]> | undefined;
     const functionNamePrefix = "_get";
     let functionNameSuffix: string = "All";
-    let functionProps: ValueOf<fromSearch.types.filters> | undefined;
+    let functionProps: ValueOf<fromSearch.coreTypes.filters> | undefined;
 
     try {
       if (typeof filters === "object") {
@@ -39,8 +39,8 @@ export class FruityviceApiService {
         const [attribute, data] =
           (
             Object.entries(filters) as [
-              keyof fromSearch.types.filters,
-              ValueOf<fromSearch.types.filters>
+              keyof fromSearch.coreTypes.filters,
+              ValueOf<fromSearch.coreTypes.filters>
             ][]
           )[0] || [];
 
@@ -99,7 +99,7 @@ export class FruityviceApiService {
     type,
     min = 0,
     max = 1000,
-  }: fromSearch.types.nutritionProps) {
+  }: fromSearch.coreTypes.nutritionProps) {
     const url = this._baseUrl + "/" + type;
     const otions: Record<string, any> = {
       params: { min, max },

@@ -1,0 +1,21 @@
+.item-container {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+  transition: all cubic-bezier(0.55, 0.4, 0.38, 1.7) 500ms;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  .item-name {
+    background-color: white;
+    align-self: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin: 0;
+  }
+}

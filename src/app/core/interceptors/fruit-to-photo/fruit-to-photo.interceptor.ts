@@ -27,7 +27,7 @@ export class FruitToPhotoInterceptor implements HttpInterceptor {
           // if was a GET request to fruityvice api...
           if (url.hostname.match(/fruityvice/) && request.method === "GET") {
             // take body response
-            const fruits = event.body as Fruit[];
+            const fruits = [event.body as Fruit | Fruit[]].flat() as Fruit[];
 
             // if response is a non empty array...
             if (Array.isArray(fruits) && fruits.length) {

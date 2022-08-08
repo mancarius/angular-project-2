@@ -28,12 +28,22 @@ export class SearchEffects {
     );
   });
 
-  /*loadFruitPhotos$ = createEffect(() => {
+  /**
+   *
+   *
+   * @memberof SearchEffects
+   */
+  showFruitInfoOnFruitSelect$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(searchActions.requestFulfilled),
-      mergeMap
+      ofType(searchActions.selectFruit),
+      mergeMap(({ type, fruit }) => {
+        if (!!fruit) {
+          return of(searchActions.ui.showFruitInfo());
+        }
+      })
     )
-  })*/
+  });
+
 
   constructor(
     private actions$: Actions,

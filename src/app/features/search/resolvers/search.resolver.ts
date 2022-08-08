@@ -1,4 +1,4 @@
-import { Search } from "src/app/features/search/store/state";
+
 import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import {
   ActivatedRouteSnapshot,
@@ -6,30 +6,32 @@ import {
   RouterStateSnapshot,
 } from "@angular/router";
 import { Store } from "@ngrx/store";
-import * as fromSearch from "src/app/features/search/store";
 import { map, Observable, take } from "rxjs";
 import { Injectable } from "@angular/core";
+import * as fromSearch from "../store";
 
 @Injectable({
   providedIn: "root",
 })
-export class SearchResolver implements Resolve<Search.requestParams> {
-  private _fruits$: Observable<Search.state["results"]>;
+export class SearchResolver
+  implements Resolve<fromSearch.coreTypes.requestParams>
+{
+  private _fruits$: Observable<fromSearch.coreTypes.state["results"]>;
 
   constructor(private _store: Store) {
-    this._fruits$ = this._store.select(fromSearch.reducers.selectResults);
+    this._fruits$ = this._store.select(fromSearch.selectors.selectResults);
   }
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ):
-    | Observable<Search.requestParams>
-    | Promise<Search.requestParams>
-    | Search.requestParams {
+    | Observable<fromSearch.coreTypes.requestParams>
+    | Promise<fromSearch.coreTypes.requestParams>
+    | fromSearch.coreTypes.requestParams {
     const { firstParam, secondParam } = route.params;
     const { page = 1, limit = 10, min = 0, max = 1000 } = route.queryParams;
-    let filters: Search.filters = {};
+    let filters: fromSearch.coreTypes.filters = {};
 
     // set filters
     if (firstParam && secondParam) {

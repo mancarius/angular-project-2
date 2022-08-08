@@ -1,0 +1,4 @@
+<button (click)="close()">Close</button>
+<div *ngIf="fruit$ | async as fruit">
+  <p>{{ fruit.name }}</p>
+</div>

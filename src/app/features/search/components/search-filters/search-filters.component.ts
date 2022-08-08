@@ -35,7 +35,7 @@ export class SearchFiltersComponent implements OnInit {
    * @type {(keyof fromSearch.types.filters)[]}
    * @memberof FiltersComponent
    */
-  arguments: (keyof fromSearch.types.filters)[] = [
+  arguments: (keyof fromSearch.coreTypes.filters)[] = [
     "name",
     "family",
     "genus",
@@ -53,10 +53,10 @@ export class SearchFiltersComponent implements OnInit {
     FruitNutritionTypes
   ) as FruitNutritionTypes[];
 
-  @Input("requestParams") params: fromSearch.types.requestParams;
+  @Input("requestParams") params: fromSearch.coreTypes.requestParams;
   @Input("loading") isLoading: boolean;
   @Output() onFiltersChange =
-    new EventEmitter<fromSearch.types.requestParams>();
+    new EventEmitter<fromSearch.coreTypes.requestParams>();
 
   constructor() {}
 
@@ -93,7 +93,7 @@ export class SearchFiltersComponent implements OnInit {
     if (this.filters.valid) {
       const { argument, value, min, max } = this.filters.getRawValue();
 
-      const filters: fromSearch.types.requestParams["filters"] = {
+      const filters: fromSearch.coreTypes.requestParams["filters"] = {
         [argument]:
           argument === FruitAttributes.nutrition
             ? { type: value, min, max }

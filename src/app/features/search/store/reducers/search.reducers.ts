@@ -3,7 +3,7 @@ import { createFeature, createReducer, on } from "@ngrx/store";
 import { searchActions } from "../actions";
 import { initialSearchState } from "../state/search.state";
 
-export const searchReducer = createReducer(
+export const searchCoreReducer = createReducer(
   initialSearchState,
   on(searchActions.setPagination, (state, { page, limit }) => ({
     ...state,
@@ -26,19 +26,14 @@ export const searchReducer = createReducer(
   on(searchActions.requestRejected, () => ({
     ...initialSearchState,
     status: HTTPRequestStatus.rejected,
+  })),
+  on(searchActions.selectFruit, (state, { type, fruit: selectedFruit }) => ({
+    ...state,
+    selectedFruit
   }))
 );
 
-export const searchFeature = createFeature({
-  name: "search",
-  reducer: searchReducer,
+export const feature = createFeature({
+  name: "searchCore",
+  reducer: searchCoreReducer,
 });
-
-export const {
-  selectPage,
-  selectFilters,
-  selectLimit,
-  selectResults,
-  selectSearchState,
-  selectStatus,
-} = searchFeature;

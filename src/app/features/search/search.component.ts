@@ -10,6 +10,8 @@ import {
 } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Route as Routes } from "@enum/route.enum";
+import { FruitWithPhoto } from "@type/fruit";
+import { searchActions } from "./store/actions";
 
 @Component({
   selector: "fruity-search",
@@ -17,21 +19,44 @@ import { Route as Routes } from "@enum/route.enum";
   styleUrls: ["./search.component.scss"],
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  filters$: Observable<fromSearch.types.filters>;
-  results$: Observable<fromSearch.types.results>;
-  isLoading$: Observable<boolean> = this._store.select(
-    fromSearch.selectors.selectSearchIsLoading
-  );
-  currentPage$: ReplaySubject<fromSearch.types.state["page"]>;
-  requestParams$: ReplaySubject<fromSearch.types.requestParams> =
+  results$: Observable<fromSearch.coreTypes.results>;
+  isLoading$: Observable<boolean>;
+  currentPage$: ReplaySubject<fromSearch.coreTypes.state["page"]>;
+  requestParams$: ReplaySubject<fromSearch.coreTypes.requestParams> =
     new ReplaySubject();
+  selectedFruit$: Observable<fromSearch.coreTypes.state["selectedFruit"]>;
+  showFruitInfoDrawer$: Observable<fromSearch.uiTypes.state["showInfo"]>;
+  showFiltersDrawer$: Observable<fromSearch.uiTypes.state["showFilters"]>;
+
   private _unsubscribeAll$: Subject<any> = new Subject();
 
   constructor(
     private _store: Store,
     private _router: Router,
     private _route: ActivatedRoute
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this._route.data
+      .pipe(distinctUntilChanged(), takeUntil(this._unsubscribeAll$))
+      .subscribe(({ requestParams }) => this.setRequestParams(requestParams));
+
+    // Set selectors
+
+    this.results$ = this._store.select(fromSearch.selectors.selectResults);
+    this.isLoading$ = this._store.select(
+      fromSearch.selectors.selectSearchIsLoading
+    );
+    this.selectedFruit$ = this._store.select(
+      fromSearch.selectors.selectSelectedFruit
+    );
+    this.showFruitInfoDrawer$ = this._store.select(
+      fromSearch.selectors.selectShowInfo
+    );
+    this.showFiltersDrawer$ = this._store.select(
+      fromSearch.selectors.selectShowFilters
+    );
+
     // refresh query params in the url on query params change
     this.requestParams$
       .pipe(
@@ -63,8 +88,8 @@ export class SearchComponent implements OnInit, OnDestroy {
           // compose query params
           queryParams = {
             ...queryParams,
-            ...(() => (typeof min === "undefined" ? { min } : {}))(),
-            ...(() => (typeof max === "undefined" ? { max } : {}))(),
+            ...(() => (typeof min !== "undefined" ? { min } : {}))(),
+            ...(() => (typeof max !== "undefined" ? { max } : {}))(),
           };
 
           // Navigate to route with params
@@ -76,23 +101,20 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {
-    this._route.data
-      .pipe(distinctUntilChanged(), takeUntil(this._unsubscribeAll$))
-      .subscribe(({ requestParams }) => this.setRequestParams(requestParams));
-
-    this.results$ = this._store.select(fromSearch.reducers.selectResults);
-    this.isLoading$ = this._store.select(
-      fromSearch.selectors.selectSearchIsLoading
-    );
-  }
-
   ngOnDestroy() {
     this._unsubscribeAll$.next(true);
     this._unsubscribeAll$.complete();
   }
 
-  setRequestParams(params: fromSearch.types.requestParams): void {
+  setRequestParams(params: fromSearch.coreTypes.requestParams): void {
     this.requestParams$.next(params);
+  }
+
+  showFruitInfo(fruit: FruitWithPhoto) {
+    this._store.dispatch(searchActions.selectFruit({ fruit }));
+  }
+
+  closeFruitInfoDrawer() {
+    this._store.dispatch(searchActions.ui.hideFruitInfo());
   }
 }

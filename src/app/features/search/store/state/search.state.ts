@@ -1,5 +1,5 @@
 import { HTTPRequestStatus } from "@enum/http-request-status.enum";
-import { Fruit } from "@type/fruit";
+import { Fruit, FruitWithPhoto } from "@type/fruit";
 import { FruitNutritionTypes } from "src/app/shared/enums/fruit-nutrition-types.enum";
 
 export namespace Search {
@@ -9,6 +9,7 @@ export namespace Search {
     status: HTTPRequestStatus;
     limit: number;
     page: number;
+    selectedFruit: FruitWithPhoto | null
   }
 
   export interface filters {
@@ -53,5 +54,6 @@ export const initialSearchState: Search.state = {
   },
   status: HTTPRequestStatus.pristine,
   limit: 20,
-  page: 1
+  page: 1,
+  selectedFruit: null
 };

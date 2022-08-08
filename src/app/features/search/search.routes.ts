@@ -19,17 +19,23 @@ export const searchRoutes: Routes = [
       },
       {
         path: ":firstParam",
-        pathMatch: "full",
         title: "attribute",
-        resolve: {
-          requestParams: SearchResolver,
-        },
-        component: SearchComponent,
         children: [
           {
-            path: ":secondParam",
-            //pathMatch: "full",
+            path: "",
+            pathMatch: "full",
             title: "nutrition",
+            runGuardsAndResolvers: "pathParamsOrQueryParamsChange",
+            resolve: {
+              requestParams: SearchResolver,
+            },
+            component: SearchComponent,
+          },
+          {
+            path: ":secondParam",
+            pathMatch: "full",
+            title: "nutrition",
+            runGuardsAndResolvers: "pathParamsOrQueryParamsChange",
             resolve: {
               requestParams: SearchResolver,
             },

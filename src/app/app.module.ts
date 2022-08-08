@@ -23,8 +23,8 @@ import { coreReducers } from './core/store/reducers';
 
 @NgModule({
   imports: [
-    CounterModule,
     BrowserModule,
+    CounterModule,
     SearchModule,
     MockApiModule.forRoot([FruityviceMockApiService]),
     RouterModule.forRoot(appRoutes, {
