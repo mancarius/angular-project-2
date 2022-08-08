@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponse } from "@angular/common/http";
-import { TestBed, tick } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 import { createInterceptorNextParam } from "src/app/shared/utils/local-map/testing/interceptors.utils";
 import { HttpLoaderService } from "../../services/http-loader/http-loader.service";
 import { LoaderInterceptor } from "./loader.interceptor";
@@ -38,14 +38,14 @@ describe("LoaderInterceptor", () => {
     interceptor.intercept(mockHttpRequest, next).subscribe({
       next(value) {
         expect(HttpLoaderServiceMock.show).toHaveBeenCalledTimes(1);
-      },
-      complete() {
-        expect(HttpLoaderServiceMock.hide).toHaveBeenCalledTimes(1);
-        expect(HttpLoaderServiceMock.show).toHaveBeenCalledBefore(
-          HttpLoaderServiceMock.hide
-        );
-        done();
-      },
+      }
+    }).add(() => {
+      // check after complete/finilize
+      expect(HttpLoaderServiceMock.hide).toHaveBeenCalledTimes(1);
+      expect(HttpLoaderServiceMock.show).toHaveBeenCalledBefore(
+        HttpLoaderServiceMock.hide
+      );
+      done();
     });
   });
 });
