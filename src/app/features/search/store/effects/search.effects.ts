@@ -44,6 +44,18 @@ export class SearchEffects {
     )
   });
 
+  /**
+   *
+   *
+   * @memberof SearchEffects
+   */
+  hideFruitInfoOnSearch$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(searchActions.sendRequest),
+      mergeMap(() => of(searchActions.ui.hideFruitInfo()))
+    );
+  })
+
 
   constructor(
     private actions$: Actions,

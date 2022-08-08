@@ -106,14 +106,25 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._unsubscribeAll$.complete();
   }
 
+  /**
+   * 
+   * @param params 
+   */
   setRequestParams(params: fromSearch.coreTypes.requestParams): void {
     this.requestParams$.next(params);
   }
 
+  /**
+   * 
+   * @param fruit 
+   */
   showFruitInfo(fruit: FruitWithPhoto) {
     this._store.dispatch(searchActions.selectFruit({ fruit }));
   }
 
+  /**
+   * 
+   */
   closeFruitInfoDrawer() {
     this._store.dispatch(searchActions.ui.hideFruitInfo());
   }

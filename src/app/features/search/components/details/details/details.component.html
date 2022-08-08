@@ -1,4 +1,48 @@
-<button (click)="close()">Close</button>
-<div *ngIf="fruit$ | async as fruit">
-  <p>{{ fruit.name }}</p>
-</div>
+<article
+  *ngIf="fruit$ | async as fruit"
+  class="details-container flex flex-col"
+>
+  <div
+    class="basis-1/3 bg-center bg-no-repeat bg-cover flex flex-row-reverse p-4"
+    [style.backgroundImage]="'url(' + fruit.photo.src.large + ')'"
+  >
+    <button mat-mini-fab (click)="close()"><mat-icon>close</mat-icon></button>
+  </div>
+  <main>
+    <header class="p-4">
+      <h2>{{ fruit.name }}</h2>
+    </header>
+    <section class="px-4">
+      <dl>
+        <dt><h5>Family</h5></dt>
+        <dd class="mb-4">
+          <a
+            class="underline text-blue-900"
+            [routerLink]="familyLink$ | async"
+            >{{ fruit.family }}</a
+          >
+        </dd>
+        <dt><h5>Order</h5></dt>
+        <dd class="mb-4">
+          <a
+            class="underline text-blue-900"
+            [routerLink]="orderLink$ | async"
+            >{{ fruit.order }}</a
+          >
+        </dd>
+        <dt><h5>Genus</h5></dt>
+        <dd class="mb-4">
+          <a
+            class="underline text-blue-900"
+            [routerLink]="genusLink$ | async"
+            >{{ fruit.genus }}</a
+          >
+        </dd>
+        <dt><h5>Nutritions</h5></dt>
+        <dd class="mb-4 flex gap-2">
+          <div class="flex flex-col items-center" *ngFor="let nutrition of fruit.nutritions | keyvalue"><small>{{nutrition.key}}</small><div>{{nutrition.value}}</div></div>
+        </dd>
+      </dl>
+    </section>
+  </main>
+</article>
