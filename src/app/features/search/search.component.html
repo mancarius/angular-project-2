@@ -15,7 +15,7 @@
       (onFruitSelect)="showFruitInfo($event)"
     ></fruity-search-results>
   </mat-drawer-content>
-  <mat-drawer #infoDrawer mode="side" position="end" [opened]="showFruitInfoDrawer$ | async">
+  <mat-drawer class="w-1/3 border-0" #infoDrawer mode="side" position="end" [opened]="showFruitInfoDrawer$ | async">
     <fruity-details [fruit]="selectedFruit$" (closeDrawer)="closeFruitInfoDrawer()"></fruity-details>
   </mat-drawer>
 </mat-drawer-container>
