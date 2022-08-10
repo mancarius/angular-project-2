@@ -1,43 +1,65 @@
-<form [formGroup]="filters" (ngSubmit)="onFormSubmit()">
-
-  <p>Search for fruits where</p>
-
+<form [formGroup]="filters" (ngSubmit)="formSubmit()">
   <mat-form-field appearance="standard">
+    <mat-label>Search for</mat-label>
     <mat-select #argument formControlName="argument">
-      <mat-option *ngFor="let argument of arguments" [value]="argument">{{ argument }}</mat-option>
+      <mat-option *ngFor="let argument of arguments" [value]="argument">{{
+        argument
+      }}</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <p>is equal to</p>
-
-  <mat-form-field *ngIf="argument.value !== 'nutrition'" appearance="standard">
-    <input matInput type="text" formControlName="value" #value (input)="toLowerCase('value', value.value)"/>
-    <mat-error *ngIf="filters.get('value')?.invalid && filters.get('value').dirty">{{getErrorMessage("value")}}</mat-error>
-  </mat-form-field>
-
-  <ng-container *ngIf="argument.value === 'nutrition'">
-    <mat-form-field appearance="standard">
-      <mat-select formControlName="value">
-        <mat-option *ngFor="let nutritionType of nutritionTypes" [value]="nutritionType">{{ nutritionType }}</mat-option>
-      </mat-select>
+  <!-- FILTER VALUES -->
+  <ng-container *ngIf="argument.value !== 'all'">
+    <mat-form-field
+      *ngIf="argument.value !== 'nutrition'"
+      class="w-full"
+      appearance="standard"
+    >
+      <mat-label>Fruit {{ argument.value }}</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="value"
+        #value
+        (input)="toLowerCase('value', value.value)"
+      />
+      <mat-error
+        *ngIf="filters.get('value')?.invalid && filters.get('value').dirty"
+        >{{ getErrorMessage("value") }}</mat-error
+      >
     </mat-form-field>
 
-    <p>from</p>
+    <!-- NUTRITION -->
+    <ng-container *ngIf="argument.value === 'nutrition'">
+      <mat-form-field class="w-full" appearance="standard">
+        <mat-label>Nutrition</mat-label>
+        <mat-select formControlName="value" #value>
+          <mat-option
+            *ngFor="let nutritionType of nutritionTypes"
+            [value]="nutritionType"
+            >{{ nutritionType }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <div class="flex" *ngIf="value.value">
+        <mat-form-field appearance="standard">
+          <mat-label>From</mat-label>
+          <input matInput type="number" formControlName="min" />
+          <mat-error *ngIf="filters.get('min')?.invalid">{{
+            getErrorMessage("min")
+          }}</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="standard">
-      <input matInput type="number" formControlName="min"/>
-      <mat-error *ngIf="filters.get('min')?.invalid">{{getErrorMessage("min")}}</mat-error>
-    </mat-form-field>
+        <mat-form-field appearance="standard">
+          <mat-label>To</mat-label>
+          <input matInput type="number" formControlName="max" />
+          <mat-error *ngIf="filters.get('max')?.invalid">{{
+            getErrorMessage("max")
+          }}</mat-error>
+        </mat-form-field>
+      </div>
+    </ng-container>
 
-    <p>to</p>
-
-    <mat-form-field appearance="standard">
-      <input matInput type="number" formControlName="max"/>
-      <mat-error *ngIf="filters.get('max')?.invalid">{{getErrorMessage("max")}}</mat-error>
-    </mat-form-field>
+    <button mat-stroked-button color="primary">Apply filter</button>
   </ng-container>
-
-  <button mat-mini-fab color="primary" type="submit" aria-label="Example icon button with a delete icon">
-    <mat-icon>search</mat-icon>
-  </button>
 </form>

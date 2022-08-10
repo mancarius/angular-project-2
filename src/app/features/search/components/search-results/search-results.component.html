@@ -1,5 +1,5 @@
-<ul class="results-container w-full" *ngIf="fruits$ | async">
-  <li class="result-item" *ngFor="let fruit of fruits$ | async">
-    <fruity-search-results-item [fruit]="fruit" (click)="selectFruit(fruit)"></fruity-search-results-item>
+<ul class="results-container w-full" [ngClass]="{disabled: disabled$ | async}" *ngIf="fruits$ | async">
+  <li class="result-item-container" *ngFor="let fruit of fruits$ | async" (click)="selectFruit(fruit)" [@listAnimation]>
+    <fruity-search-results-item [fruit]="fruit"></fruity-search-results-item>
   </li>
 </ul>

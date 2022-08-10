@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Route as Routes } from "@enum/route.enum";
 import { FruitWithPhoto } from "@type/fruit";
 import { searchActions } from "./store/actions";
+import * as _ from "lodash";
 
 @Component({
   selector: "fruity-search",
@@ -38,7 +39,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._route.data
-      .pipe(distinctUntilChanged(), takeUntil(this._unsubscribeAll$))
+      .pipe(
+        distinctUntilChanged((prev, next) => _.isEqual(prev, next)),
+        takeUntil(this._unsubscribeAll$)
+      )
       .subscribe(({ requestParams }) => this.setRequestParams(requestParams));
 
     // Set selectors
@@ -61,7 +65,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.requestParams$
       .pipe(
         distinctUntilChanged(
-          (prev, curr) => JSON.stringify(prev || {}) === JSON.stringify(curr)
+          (prev, next) => _.isEqual(prev, next)
         ),
         takeUntil(this._unsubscribeAll$)
       )
@@ -81,8 +85,12 @@ export class SearchComponent implements OnInit, OnDestroy {
           const path = [
             Routes.search,
             // append params if exist
-            ...(() => (argument === "name" ? [] : [argument]))(),
-            ...(() => (argument && value ? [type || value] : []))(),
+            ...(() =>
+              argument === "name" ? [] : [argument.toLocaleLowerCase()])(),
+            ...(() =>
+              argument && value
+                ? [String(type || value).toLocaleLowerCase()]
+                : [])(),
           ];
 
           // compose query params
@@ -107,23 +115,23 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * 
-   * @param params 
+   *
+   * @param params
    */
   setRequestParams(params: fromSearch.coreTypes.requestParams): void {
     this.requestParams$.next(params);
   }
 
   /**
-   * 
-   * @param fruit 
+   *
+   * @param fruit
    */
   showFruitInfo(fruit: FruitWithPhoto) {
     this._store.dispatch(searchActions.selectFruit({ fruit }));
   }
 
   /**
-   * 
+   *
    */
   closeFruitInfoDrawer() {
     this._store.dispatch(searchActions.ui.hideFruitInfo());

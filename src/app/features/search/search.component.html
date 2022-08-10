@@ -1,21 +1,43 @@
 <mat-drawer-container class="search-container" [hasBackdrop]="false">
-  <mat-drawer class="w-1/3 border-0 bg-transparent" #filtersDrawer mode="side" position="start" disableClose="true" [opened]="showFiltersDrawer$ | async">
-    <!-- FILTERS COLUMN -->
+  <!-- FILTERS DRAWER -->
+  <mat-drawer
+    class="w-1/3 border-0 bg-transparent"
+    #filtersDrawer
+    fixedInViewport="true"
+    fixedTopGap="0"
+    fixedBottomGap="0"
+    mode="side"
+    position="start"
+    disableClose="true"
+    [opened]="showFiltersDrawer$ | async"
+  >
     <fruity-search-filters
-      class="filters-col sticky top-0"
-      [requestParams]="requestParams$ | async"
+      class="filters-col sticky top-0 overflow-hidden"
+      [requestParams]="requestParams$"
       (onFiltersChange)="setRequestParams($event)"
     ></fruity-search-filters>
   </mat-drawer>
+  <!-- RESULTS DRAWER -->
   <mat-drawer-content class="results-col w-full">
-    <!-- RESULTS COLUMN -->
     <fruity-search-results
       class="w-full"
       [data]="results$"
+      [disabled]="isLoading$"
       (onFruitSelect)="showFruitInfo($event)"
     ></fruity-search-results>
   </mat-drawer-content>
-  <mat-drawer class="w-1/3 border-0" #infoDrawer mode="side" position="end" [opened]="showFruitInfoDrawer$ | async">
-    <fruity-details [fruit]="selectedFruit$" (closeDrawer)="closeFruitInfoDrawer()"></fruity-details>
+  <!-- DETAILS DRAWER -->
+  <mat-drawer
+    class="w-1/3 border-0"
+    #infoDrawer
+    fixedInViewport="true"
+    mode="side"
+    position="end"
+    [opened]="showFruitInfoDrawer$ | async"
+  >
+    <fruity-details
+      [fruit]="selectedFruit$"
+      (closeDrawer)="closeFruitInfoDrawer()"
+    ></fruity-details>
   </mat-drawer>
 </mat-drawer-container>

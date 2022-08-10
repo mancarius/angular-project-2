@@ -1,4 +1,3 @@
-
 import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import {
   ActivatedRouteSnapshot,
@@ -6,7 +5,7 @@ import {
   RouterStateSnapshot,
 } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { map, Observable, take } from "rxjs";
+import { distinctUntilChanged, map, Observable, take } from "rxjs";
 import { Injectable } from "@angular/core";
 import * as fromSearch from "../store";
 
@@ -39,7 +38,7 @@ export class SearchResolver
 
       filters = {
         [firstParam]: isNutrition
-          ? { type: secondParam, min, max }
+          ? { type: secondParam, min: Number(min), max: Number(max) }
           : secondParam,
       };
     } else if (firstParam && !secondParam) {
@@ -52,8 +51,8 @@ export class SearchResolver
     this._store.dispatch(
       fromSearch.actions.sendRequest({
         filters,
-        page,
-        limit,
+        page: Number(page),
+        limit: Number(limit),
       })
     );
 
@@ -61,9 +60,13 @@ export class SearchResolver
       take(1),
       map((_) => ({
         filters,
-        page,
-        limit,
-      }))
+        page: Number(page),
+        limit: Number(limit),
+      })),
+      distinctUntilChanged(
+        (prev, next) =>
+          JSON.stringify(prev?.filters || {}) !== JSON.stringify(next.filters)
+      )
     );
   }
 }

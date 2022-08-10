@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { mergeMap, map, catchError, of, tap } from "rxjs";
+import * as _ from "lodash";
+import { mergeMap, map, catchError, of, tap, distinctUntilChanged } from "rxjs";
 import { searchActions } from "../actions";
 import { FruityviceApiService } from "../services/fruityvice-api/fruityvice-api.service";
 
@@ -14,16 +15,15 @@ export class SearchEffects {
   fruitsRequest$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(searchActions.sendRequest),
+      distinctUntilChanged((prev, next) => _.isEqual(prev, next)),
       mergeMap(({ type, ...props }) => {
         const { filters, page, limit } = props;
         const skip = (page - 1) * limit;
         // call service
-        return this.fruitSearch
-          .find({ filters, skip, limit })
-          .pipe(
-            map((results) => searchActions.requestFulfilled({ results })),
-            catchError((error) => of(searchActions.requestRejected({ error })))
-          );
+        return this.fruitSearch.find({ filters, skip, limit }).pipe(
+          map((results) => searchActions.requestFulfilled({ results })),
+          catchError((error) => of(searchActions.requestRejected({ error })))
+        );
       })
     );
   });
@@ -41,7 +41,7 @@ export class SearchEffects {
           return of(searchActions.ui.showFruitInfo());
         }
       })
-    )
+    );
   });
 
   /**
@@ -54,11 +54,10 @@ export class SearchEffects {
       ofType(searchActions.sendRequest),
       mergeMap(() => of(searchActions.ui.hideFruitInfo()))
     );
-  })
-
+  });
 
   constructor(
     private actions$: Actions,
-    private fruitSearch: FruityviceApiService,
+    private fruitSearch: FruityviceApiService
   ) {}
 }

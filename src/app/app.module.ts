@@ -24,7 +24,7 @@ import { coreReducers } from './core/store/reducers';
 @NgModule({
   imports: [
     BrowserModule,
-    CounterModule,
+    BrowserAnimationsModule,
     SearchModule,
     MockApiModule.forRoot([FruityviceMockApiService]),
     RouterModule.forRoot(appRoutes, {
@@ -40,7 +40,6 @@ import { coreReducers } from './core/store/reducers';
       logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
-    BrowserAnimationsModule,
     StoreRouterConnectingModule.forRoot(),
     HttpClientModule,
     MatProgressBarModule,

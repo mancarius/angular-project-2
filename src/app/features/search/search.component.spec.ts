@@ -2,7 +2,7 @@ import { StoreModule } from "@ngrx/store";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { SearchComponent } from "./search.component";
 import { RouterTestingModule } from "@angular/router/testing";
-import { searchReducer } from "./store/reducers/search.reducers";
+import { searchReducers } from "./store/reducers";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 
 describe("SearchComponent", () => {
@@ -15,7 +15,7 @@ describe("SearchComponent", () => {
       declarations: [SearchComponent],
       imports: [
         RouterTestingModule,
-        StoreModule.forRoot({ search: searchReducer }),
+        StoreModule.forRoot({ search: searchReducers }),
       ],
       providers: [provideMockStore({ initialState: {} })],
     }).compileComponents();

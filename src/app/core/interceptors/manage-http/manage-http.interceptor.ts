@@ -13,13 +13,13 @@ import { HttpAbortService } from '../../services/http-abort/http-abort.service';
 export class ManageHttpInterceptor implements HttpInterceptor {
 
   constructor(router: Router, private httpAbortService: HttpAbortService) {
-    /*router.events.subscribe(event => {
+    router.events.subscribe(event => {
       // An event triggered at the end of the activation part of the Resolve phase of routing.
       if (event instanceof ActivationStart) {
         // Cancel pending calls
         this.httpAbortService.abortPendingRequests();
       }
-    })*/
+    })
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {

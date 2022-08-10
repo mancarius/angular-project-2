@@ -1,6 +1,12 @@
+import { ReplaySubject, Subject, takeUntil } from "rxjs";
 import { ValueOf } from "@type/value-of";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import { FruitNutritionTypes } from "@enum/fruit-nutrition-types.enum";
 import * as fromSearch from "src/app/features/search/store";
@@ -12,57 +18,100 @@ import { minMaxCrossValidator } from "src/app/shared/validators/min-max-cross.di
   styleUrls: ["./search-filters.component.scss"],
 })
 export class SearchFiltersComponent implements OnInit {
-  /**
-   * FormGroup
-   *
-   * @memberof SearchFiltersComponent
-   */
-  filters = new FormGroup(
-    {
-      argument: new FormControl("name", [Validators.required]),
-      value: new FormControl("", [Validators.required]),
-      min: new FormControl(0, [Validators.min(0), Validators.max(999)]),
-      max: new FormControl(1000, [Validators.min(1), Validators.max(1000)]),
-    },
-    {
-      validators: [minMaxCrossValidator],
-    }
-  );
-
+  params: fromSearch.coreTypes.requestParams;
+  filters: FormGroup;
   /**
    * filter keys
-   *
-   * @type {(keyof fromSearch.types.filters)[]}
-   * @memberof FiltersComponent
    */
-  arguments: (keyof fromSearch.coreTypes.filters)[] = [
+  arguments: (keyof fromSearch.coreTypes.filters | "all")[] = [
+    "all",
     "name",
     "family",
     "genus",
     "nutrition",
     "order",
   ];
-
-  /**
-   * Nutrition types
-   *
-   * @type {FruitNutritionTypes[]}
-   * @memberof SearchFiltersComponent
-   */
   nutritionTypes: FruitNutritionTypes[] = Object.keys(
     FruitNutritionTypes
   ) as FruitNutritionTypes[];
 
-  @Input("requestParams") params: fromSearch.coreTypes.requestParams;
+  @Input("requestParams")
+  params$: ReplaySubject<fromSearch.coreTypes.requestParams>;
   @Input("loading") isLoading: boolean;
   @Output() onFiltersChange =
     new EventEmitter<fromSearch.coreTypes.requestParams>();
 
-  constructor() {}
+  private _unsubscribeAll$ = new Subject();
+
+  constructor() {
+    // init form
+    this.filters = new FormGroup<{
+      argument: FormControl<keyof fromSearch.coreTypes.filters | "all">;
+      value: FormControl<string>;
+      min: FormControl<number>;
+      max: FormControl<number>;
+    }>(
+      {
+        argument: new FormControl("all", [Validators.required]),
+        value: new FormControl("", [Validators.required]),
+        min: new FormControl(0, [Validators.min(0), Validators.max(999)]),
+        max: new FormControl(1000, [Validators.min(1), Validators.max(1000)]),
+      },
+      {
+        validators: [minMaxCrossValidator],
+      }
+    );
+  }
 
   ngOnInit(): void {
-    const { filters } = this.params || {};
+    this.params$.pipe(takeUntil(this._unsubscribeAll$)).subscribe({
+      next: (value) => {
+        this.params = value;
+        this._passFiltersToFormGroup(this.params.filters || {});
+      },
+    });
 
+    this.filters
+      .get("argument")
+      .valueChanges.pipe(takeUntil(this._unsubscribeAll$))
+      .subscribe({
+        next: (value) => {
+          // submit form if no filters
+          if (value === "all") this.formSubmit();
+          // reset fields on argument change
+          this.filters.get("value")?.reset();
+          this.filters.get("min")?.reset();
+          this.filters.get("max")?.reset();
+        },
+      });
+  }
+
+  /**
+   * Form Submit
+   */
+  formSubmit(): void {
+    console.log(this.filters.get("argument").value);
+    if (this.filters.valid) {
+      const { argument, value, min, max } = this.filters.getRawValue();
+
+      const filters: fromSearch.coreTypes.requestParams["filters"] = {
+        [argument]:
+          argument === FruitAttributes.nutrition
+            ? { type: value, min, max }
+            : value,
+      };
+
+      this.onFiltersChange.emit({ ...this.params, filters });
+    } else if (this.filters.get("argument").value === "all") {
+      this.onFiltersChange.emit({ ...this.params, filters: {} });
+    }
+  }
+
+  /**
+   *
+   * @param filters
+   */
+  private _passFiltersToFormGroup(filters: fromSearch.coreTypes.filters): void {
     if (filters && Object.keys(filters).length) {
       const [argument, value] =
         (Object.entries(filters)[0] as [
@@ -88,24 +137,6 @@ export class SearchFiltersComponent implements OnInit {
 
   /**
    *
-   */
-  onFormSubmit(): void {
-    if (this.filters.valid) {
-      const { argument, value, min, max } = this.filters.getRawValue();
-
-      const filters: fromSearch.coreTypes.requestParams["filters"] = {
-        [argument]:
-          argument === FruitAttributes.nutrition
-            ? { type: value, min, max }
-            : value,
-      };
-
-      this.onFiltersChange.emit({ ...this.params, filters });
-    }
-  }
-
-  /**
-   *
    * @param field
    * @returns
    */
@@ -113,6 +144,7 @@ export class SearchFiltersComponent implements OnInit {
     const errors = this.filters.get(field)?.errors ?? {};
     const errorType = Object.keys(errors)[0];
     const errorInfo = Object.values(errors)[0];
+
     if (errorType) {
       switch (errorType) {
         case "min":

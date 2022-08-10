@@ -1,7 +1,28 @@
 .results-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 12rem));
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
   gap: 3rem;
   padding: 5vmax;
   justify-content: center;
+  transition: all ease 400ms;
+  align-items: center;
+
+  &.disabled {
+    pointer-events: none;
+    filter: grayscale(100%) opacity(0.5);
+  }
+
+  .result-item-container {
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all cubic-bezier(0.55, 0.4, 0.38, 1.7) 500ms;
+    width: 12rem;
+    height: 12rem;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }

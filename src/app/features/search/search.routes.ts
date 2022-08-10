@@ -12,6 +12,7 @@ export const searchRoutes: Routes = [
         path: "all",
         pathMatch: "full",
         title: "All fruits",
+        runGuardsAndResolvers: "always",
         resolve: {
           requestParams: SearchResolver,
         },
@@ -25,7 +26,7 @@ export const searchRoutes: Routes = [
             path: "",
             pathMatch: "full",
             title: "nutrition",
-            runGuardsAndResolvers: "pathParamsOrQueryParamsChange",
+            runGuardsAndResolvers: "always",
             resolve: {
               requestParams: SearchResolver,
             },
@@ -33,9 +34,8 @@ export const searchRoutes: Routes = [
           },
           {
             path: ":secondParam",
-            pathMatch: "full",
             title: "nutrition",
-            runGuardsAndResolvers: "pathParamsOrQueryParamsChange",
+            runGuardsAndResolvers: "always",
             resolve: {
               requestParams: SearchResolver,
             },
