@@ -28,7 +28,7 @@ export class FruityviceApiService {
     skip: number;
     limit: number;
   }): Observable<fromSearch.coreTypes.results> {
-    let result$: Observable<Fruit[]> | undefined;
+    let result$: Observable<Fruit[]>;
     const functionNamePrefix = "_get";
     let functionNameSuffix: string = "All";
     let functionProps: ValueOf<fromSearch.coreTypes.filters> | undefined;
@@ -85,7 +85,7 @@ export class FruityviceApiService {
    * Require all fruits
    * @returns {Observable<Fruit[]>}
    */
-  private _getAll() {
+  private _getAll(): Observable<Fruit[]> {
     const url = this._baseUrl + "/all";
     return this._http.get<Fruit[]>(url);
   }
@@ -99,7 +99,7 @@ export class FruityviceApiService {
     type,
     min = 0,
     max = 1000,
-  }: fromSearch.coreTypes.nutritionProps) {
+  }: fromSearch.coreTypes.nutritionProps): Observable<Fruit[]> {
     const url = this._baseUrl + "/" + type;
     const otions: Record<string, any> = {
       params: { min, max },
@@ -113,7 +113,7 @@ export class FruityviceApiService {
    * @param _fruitName
    * @returns
    */
-  private _getByName(_fruitName: string) {
+  private _getByName(_fruitName: string): Observable<Fruit[]> {
     const url = this._baseUrl + "/" + _fruitName;
 
     return this._http.get<Fruit[]>(url);
@@ -124,7 +124,7 @@ export class FruityviceApiService {
    * @param {string} _familyName
    * @returns {Observable<Fruit[]>}
    */
-  private _getByFamily(_familyName: string) {
+  private _getByFamily(_familyName: string): Observable<Fruit[]> {
     const url = this._baseUrl + "/family/" + _familyName;
 
     return this._http.get<Fruit[]>(url);
@@ -132,10 +132,11 @@ export class FruityviceApiService {
 
   /**
    * Request fruits with given order
+   * 
    * @param {string} orderName
    * @returns {Observable<Fruit[]>}
    */
-  private _getByOrder(_orderName: string) {
+  private _getByOrder(_orderName: string): Observable<Fruit[]> {
     const url = this._baseUrl + "/order/" + _orderName;
 
     return this._http.get<Fruit[]>(url);
@@ -143,10 +144,11 @@ export class FruityviceApiService {
 
   /**
    * Request fruits with given genus
+   * 
    * @param {string} _genusName
    * @returns {Observable<Fruit[]>}
    */
-  private _getByGenus(_genusName: string) {
+  private _getByGenus(_genusName: string): Observable<Fruit[]> {
     const url = this._baseUrl + "/genus/" + _genusName;
 
     return this._http.get<Fruit[]>(url);
