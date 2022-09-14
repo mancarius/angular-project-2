@@ -1,4 +1,5 @@
 export enum Route {
   search = "search",
-  counter = "counter"
+  counter = "counter",
+  fruit = "fruit"
 }

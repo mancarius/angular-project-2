@@ -1,4 +1,4 @@
-<form [formGroup]="filters" (ngSubmit)="formSubmit()">
+<form [formGroup]="filtersForm" (ngSubmit)="formSubmit()">
   <mat-form-field appearance="standard">
     <mat-label>Search for</mat-label>
     <mat-select #argument formControlName="argument">

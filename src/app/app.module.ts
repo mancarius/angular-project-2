@@ -1,3 +1,4 @@
+import { FruitPageModule } from "./features/fruit-page/fruit-page.module";
 import { MockApiModule } from './core/services/mock-api/mock-api.module';
 import { RouterModule } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
@@ -9,7 +10,6 @@ import { environment } from "src/environments/environment";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 
 import { AppComponent } from "./app.component";
-import { CounterModule } from "./features/counter/counter.module";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpAbortService } from "./core/services/http-abort/http-abort.service";
 import { SearchModule } from "@fruit/search/search.module";
@@ -26,6 +26,7 @@ import { coreReducers } from './core/store/reducers';
     BrowserModule,
     BrowserAnimationsModule,
     SearchModule,
+    FruitPageModule,
     MockApiModule.forRoot([FruityviceMockApiService]),
     RouterModule.forRoot(appRoutes, {
       errorHandler: console.error,

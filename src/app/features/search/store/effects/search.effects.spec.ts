@@ -6,7 +6,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { SearchEffects } from "./search.effects";
 import { TestScheduler } from "rxjs/testing";
 import { searchActions } from "../actions";
-import { FruityviceApiService } from "../services/fruityvice-api/fruityvice-api.service";
+import { FruityviceApiService } from "../../../../shared/services/fruityvice-api/fruityvice-api.service";
 import { searchReducers } from "../reducers";
 
 describe("SearchEffects", () => {

@@ -11,7 +11,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { Route as Routes } from "@enum/route.enum";
 import { FruitWithPhoto } from "@type/fruit";
-import { searchActions } from "./store/actions";
+import { searchActions } from "../store/actions";
 import * as _ from "lodash";
 
 @Component({

@@ -3,31 +3,31 @@ import { FruitWithPhoto } from "@type/fruit";
 import { Search } from "../state/search.state";
 
 export const sendRequest = createAction(
-  "[Fruit Search] Send request",
+  "[Search Page] Send request",
   props<Search.requestParams>()
 );
 
 export const requestFulfilled = createAction(
-  "[Fruit Search] Fulfilled request",
+  "[Search Page] Fulfilled request",
   props<{ results: Search.state["results"] }>()
 );
 
 export const requestRejected = createAction(
-  "[Fruit Search] Rejected request",
+  "[Search Page] Rejected request",
   props<{ error: any }>()
 );
 
 export const setPagination = createAction(
-  "[Fruit Search] Set pagination",
+  "[Search Page] Set pagination",
   props<{ page?: Search.state["page"]; limit?: Search.state["limit"] }>()
 );
 
 export const setFilters = createAction(
-  "[Fruit Search] Set filters",
+  "[Search Page] Set filters",
   props<Search.filters>()
 );
 
 export const selectFruit = createAction(
-  "[Fruit Search] Select fruit",
+  "[Search Page] Select fruit",
   props<{ fruit: FruitWithPhoto }>()
 );

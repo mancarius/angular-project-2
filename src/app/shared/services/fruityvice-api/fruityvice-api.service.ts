@@ -4,7 +4,7 @@ import { FruitAttributes } from "@enum/fruit-attributes.enum";
 import { Fruit } from "@type/fruit";
 import { ValueOf } from "@type/value-of";
 import { map, Observable } from "rxjs";
-import * as fromSearch from "../..";
+import * as fromSearch from "../../../features/search/store";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,19 @@ export class FruityviceApiService {
   constructor(protected _http: HttpClient) {}
 
   /**
+   * Get fruit by id
+   *
+   * @param fruitId
+   * @returns {Observable<Fruit>}
+   */
+  getById(fruitId: number): Observable<Fruit> {
+    const url = `${this._baseUrl}/${fruitId}`;
+    return this._http.get<Fruit>(url);
+  }
+
+  /**
    * Find fruits using the given filters. Returns results depending on pagination
+   *
    * @param {Search.requestProps} params
    * @returns {Observable<Fruit[]>}
    */
@@ -83,6 +95,7 @@ export class FruityviceApiService {
 
   /**
    * Require all fruits
+   *
    * @returns {Observable<Fruit[]>}
    */
   private _getAll(): Observable<Fruit[]> {
@@ -92,6 +105,7 @@ export class FruityviceApiService {
 
   /**
    * Require fruits filtered by nutrition values
+   *
    * @param {Search.nutritionProps} data
    * @returns {Observable<Fruit[]>}
    */
@@ -110,6 +124,7 @@ export class FruityviceApiService {
 
   /**
    * Request fruits with given name
+   *
    * @param _fruitName
    * @returns
    */
@@ -121,6 +136,7 @@ export class FruityviceApiService {
 
   /**
    * Request fruits with given family
+   *
    * @param {string} _familyName
    * @returns {Observable<Fruit[]>}
    */
@@ -132,7 +148,7 @@ export class FruityviceApiService {
 
   /**
    * Request fruits with given order
-   * 
+   *
    * @param {string} orderName
    * @returns {Observable<Fruit[]>}
    */
@@ -144,7 +160,7 @@ export class FruityviceApiService {
 
   /**
    * Request fruits with given genus
-   * 
+   *
    * @param {string} _genusName
    * @returns {Observable<Fruit[]>}
    */

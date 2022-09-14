@@ -1,0 +1,19 @@
+<header>
+  <h1>Frubis</h1>
+</header>
+<section class="search-container">
+  <!-- FILTERS -->
+  <fruity-search-filters
+    class="filters-container sticky top-0 overflow-hidden"
+    [requestParams]="requestParams$"
+    (onFiltersChange)="setRequestParams($event)"
+  ></fruity-search-filters>
+
+  <!-- RESULTS -->
+  <fruity-search-results
+    class="results-container w-full"
+    [data]="results$"
+    [disabled]="isLoading$"
+    (onFruitSelect)="showFruitInfo($event)"
+  ></fruity-search-results>
+</section>

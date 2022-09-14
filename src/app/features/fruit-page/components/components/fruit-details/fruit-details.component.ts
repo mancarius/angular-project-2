@@ -1,17 +1,16 @@
 import { Observable, map } from "rxjs";
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FruitWithPhoto } from '@type/fruit';
 import { Route } from '@enum/route.enum';
 import { FruitAttributes } from '@enum/fruit-attributes.enum';
 
 @Component({
   selector: "fruity-details",
-  templateUrl: "./details.component.html",
-  styleUrls: ["./details.component.scss"],
+  templateUrl: "./fruit-details.component.html",
+  styleUrls: ["./fruit-details.component.scss"],
 })
-export class DetailsComponent implements OnInit {
+export class FruitDetailsComponent implements OnInit {
   @Input("fruit") fruit$: Observable<FruitWithPhoto>;
-  @Output("closeDrawer") closeDrawer = new EventEmitter();
 
   constructor() {}
 
@@ -33,9 +32,5 @@ export class DetailsComponent implements OnInit {
     return this.fruit$.pipe(
       map((fruit) => ["/" + Route.search, FruitAttributes.genus, fruit.genus])
     );
-  }
-
-  close() {
-    this.closeDrawer.emit();
   }
 }

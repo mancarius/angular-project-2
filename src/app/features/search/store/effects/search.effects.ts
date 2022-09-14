@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import * as _ from "lodash";
 import { mergeMap, map, catchError, of, tap, distinctUntilChanged } from "rxjs";
 import { searchActions } from "../actions";
-import { FruityviceApiService } from "../services/fruityvice-api/fruityvice-api.service";
+import { FruityviceApiService } from "../../../../shared/services/fruityvice-api/fruityvice-api.service";
 
 @Injectable()
 export class SearchEffects {
